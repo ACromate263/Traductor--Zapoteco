@@ -2,13 +2,12 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#1a73e8">
-    <meta name="description" content="Traductor interactivo Zapoteco-Español. Preservando el diidxazá mediante tecnología.">
-    <title>Traductor Diidxazá - Español | Edición Estatal</title>
+    <title>Traductor Diidxazá - Español | Responsivo</title>
     
     <style>
-        /* VARIABLES CSS (Para el Modo Claro y Oscuro) */
+        /* VARIABLES CSS */
         :root {
             --bg-color: #f0f4f8;
             --panel-bg: #ffffff;
@@ -18,8 +17,8 @@
             --accent-hover: #2b6cb0;
             --border-color: #e2e8f0;
             --alert-color: #e53e3e;
-            --success-bg: #ebf8ff;
-            --card-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            --success-color: #38a169;
+            --card-shadow: 0 8px 20px rgba(0,0,0,0.06);
             --transition-speed: 0.3s;
         }
 
@@ -29,431 +28,379 @@
             --text-primary: #f7fafc;
             --text-secondary: #a0aec0;
             --border-color: #4a5568;
-            --success-bg: #2b6cb0;
-            --card-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            --card-shadow: 0 8px 20px rgba(0,0,0,0.3);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            transition: background-color var(--transition-speed), color var(--transition-speed);
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; transition: background-color var(--transition-speed), color var(--transition-speed); }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
+        body { background-color: var(--bg-color); color: var(--text-primary); display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 15px; }
 
-        /* NAVEGACIÓN Y MODO OSCURO */
-        nav {
-            width: 100%;
-            max-width: 900px;
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 10px;
-        }
-
-        .theme-btn {
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: bold;
-            box-shadow: var(--card-shadow);
-        }
-
-        .theme-btn:hover {
-            border-color: var(--accent-color);
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        header h1 {
-            font-size: 2.5rem;
-            background: linear-gradient(135deg, var(--accent-color), #805ad5);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 5px;
-        }
-
-        header p {
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
-
-        /* SECCIÓN PALABRA DEL DÍA */
-        .word-of-day {
-            background: var(--panel-bg);
-            border-left: 4px solid #805ad5;
-            padding: 15px 20px;
-            border-radius: 8px;
-            width: 100%;
-            max-width: 900px;
-            margin-bottom: 25px;
-            box-shadow: var(--card-shadow);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .word-of-day span {
-            font-size: 1.1rem;
-        }
-
-        .wod-zapotec {
-            font-weight: bold;
-            color: #805ad5;
-            font-size: 1.3rem;
-        }
-
-        .translator-container {
-            width: 100%;
-            max-width: 900px;
-        }
-
-        .translation-box {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            background: var(--panel-bg);
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: var(--card-shadow);
-            border: 1px solid transparent;
-        }
-
-        @media (min-width: 768px) {
-            .translation-box {
-                flex-direction: row;
-                align-items: stretch;
-            }
-        }
-
-        .panel {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .lang-select {
-            padding: 12px;
-            border: none;
-            border-bottom: 2px solid var(--border-color);
-            font-size: 1.1rem;
-            color: var(--accent-color);
-            font-weight: bold;
-            background: transparent;
-            cursor: pointer;
-            outline: none;
-        }
-
-        textarea {
-            width: 100%;
-            height: 140px;
-            padding: 15px;
-            background-color: transparent;
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            resize: none;
-            font-size: 1.3rem;
-            outline: none;
-        }
-
-        textarea:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.2);
-        }
-
-        #output-text {
-            background-color: rgba(0,0,0,0.02);
-            font-weight: 600;
-        }
-
-        [data-theme="dark"] #output-text {
-            background-color: rgba(255,255,255,0.02);
-        }
-
-        .description-box {
-            background-color: var(--success-bg);
-            color: var(--text-primary);
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            border-left: 4px solid var(--accent-color);
-            line-height: 1.6;
-        }
-
-        .description-box.not-found {
-            background-color: rgba(229, 62, 62, 0.1);
-            border-left-color: var(--alert-color);
-        }
-
-        .swap-btn {
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            font-size: 1.4rem;
-            cursor: pointer;
-            align-self: center;
-            z-index: 1;
-            color: var(--text-secondary);
-            box-shadow: var(--card-shadow);
-        }
-
-        .swap-btn:hover {
-            color: var(--accent-color);
-            border-color: var(--accent-color);
-            transform: scale(1.05);
-        }
-
-        .primary-btn {
-            display: block;
-            width: 100%;
-            max-width: 280px;
-            margin: 30px auto 0;
-            padding: 16px 24px;
-            background: linear-gradient(135deg, var(--accent-color), #2b6cb0);
-            color: white;
-            border: none;
-            border-radius: 30px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(49, 130, 206, 0.4);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .primary-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(49, 130, 206, 0.6);
-        }
-
-        /* EFECTOS VISUALES MEJORADOS */
-        .effect-water { border-color: #00a8ff; box-shadow: 0 0 30px rgba(0, 168, 255, 0.2); }
-        .effect-blood { animation: latido 1.5s infinite; border-color: #e84118; }
-        .effect-fire { border-color: #ff9f43; box-shadow: 0 0 30px rgba(255, 159, 67, 0.2); }
-        .effect-nature { border-color: #4cd137; box-shadow: 0 0 30px rgba(76, 209, 55, 0.2); }
+        /* NAVEGACIÓN RESPONSIVA */
+        nav { width: 100%; max-width: 900px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 20px; }
+        @media (min-width: 600px) { nav { justify-content: space-between; } }
         
-        @keyframes latido {
-            0% { box-shadow: 0 0 10px rgba(232, 65, 24, 0.1); transform: scale(1); }
-            50% { box-shadow: 0 0 25px rgba(232, 65, 24, 0.3); transform: scale(1.01); }
-            100% { box-shadow: 0 0 10px rgba(232, 65, 24, 0.1); transform: scale(1); }
-        }
+        .nav-btn { background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px 18px; border-radius: 25px; cursor: pointer; font-weight: bold; box-shadow: var(--card-shadow); flex: 1; min-width: 150px; max-width: 200px; text-align: center; }
+        .nav-btn:hover { border-color: var(--accent-color); color: var(--accent-color); }
+
+        header { text-align: center; margin-bottom: 25px; padding: 0 10px; }
+        header h1 { font-size: clamp(2rem, 5vw, 2.5rem); background: linear-gradient(135deg, var(--accent-color), #805ad5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        header p { color: var(--text-secondary); font-weight: 500; font-size: clamp(0.9rem, 3vw, 1.1rem); }
+
+        /* TRADUCTOR PRINCIPAL RESPONSIVO */
+        .main-container { width: 100%; max-width: 900px; }
+        .translation-box { display: flex; flex-direction: column; gap: 15px; background: var(--panel-bg); padding: 20px; border-radius: 16px; box-shadow: var(--card-shadow); margin-bottom: 20px; }
+        @media (min-width: 768px) { .translation-box { flex-direction: row; align-items: stretch; padding: 30px; } }
+        
+        .panel { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+        .lang-select { padding: 12px 5px; border: none; border-bottom: 2px solid var(--border-color); font-size: 1.1rem; color: var(--accent-color); font-weight: bold; background: transparent; cursor: pointer; outline: none; width: 100%; }
+        textarea { width: 100%; height: 120px; padding: 15px; background-color: transparent; color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 10px; resize: none; font-size: 1.2rem; outline: none; }
+        @media (min-width: 768px) { textarea { height: 140px; font-size: 1.3rem; } }
+        textarea:focus { border-color: var(--accent-color); box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.2); }
+        #output-text { background-color: rgba(0,0,0,0.02); font-weight: 600; }
+        [data-theme="dark"] #output-text { background-color: rgba(255,255,255,0.02); }
+        
+        .description-box { background-color: rgba(49, 130, 206, 0.1); color: var(--text-primary); padding: 15px; border-radius: 8px; font-size: 0.95rem; border-left: 4px solid var(--accent-color); line-height: 1.5; }
+        .description-box.not-found { background-color: rgba(229, 62, 62, 0.1); border-left-color: var(--alert-color); }
+
+        .swap-btn { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 50%; width: 45px; height: 45px; font-size: 1.2rem; cursor: pointer; align-self: center; color: var(--text-secondary); box-shadow: var(--card-shadow); display: flex; align-items: center; justify-content: center; }
+        @media (min-width: 768px) { .swap-btn { width: 50px; height: 50px; font-size: 1.4rem; transform: rotate(90deg); } } /* Gira la flecha en escritorio */
+        .swap-btn:hover { color: var(--accent-color); border-color: var(--accent-color); transform: scale(1.05); }
+        @media (min-width: 768px) { .swap-btn:hover { transform: rotate(90deg) scale(1.05); } }
+
+        .primary-btn { display: block; width: 100%; padding: 15px 20px; background: linear-gradient(135deg, var(--accent-color), #2b6cb0); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(49, 130, 206, 0.4); transition: transform 0.2s; }
+        .primary-btn:hover { transform: translateY(-2px); }
+
+        /* PANEL CRUD RESPONSIVO */
+        #crud-section { display: none; background: var(--panel-bg); padding: 20px; border-radius: 16px; box-shadow: var(--card-shadow); margin-top: 20px; animation: fadeIn 0.4s; width: 100%; }
+        @media (min-width: 768px) { #crud-section { padding: 30px; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .crud-header { display: flex; flex-direction: column; gap: 5px; margin-bottom: 20px; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
+        @media (min-width: 600px) { .crud-header { flex-direction: row; justify-content: space-between; align-items: center; } }
+        
+        /* Formulario Grid adaptativo */
+        .crud-form { display: grid; grid-template-columns: 1fr; gap: 15px; margin-bottom: 25px; }
+        @media (min-width: 768px) { .crud-form { grid-template-columns: 1fr 1fr; } }
+        
+        .crud-form input { padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; background: transparent; color: var(--text-primary); font-size: 1rem; outline: none; width: 100%; }
+        .crud-form input:focus { border-color: var(--accent-color); }
+        .crud-form .full-width { grid-column: 1 / -1; }
+        
+        .action-btns { display: flex; flex-direction: column; gap: 10px; grid-column: 1 / -1; }
+        @media (min-width: 600px) { .action-btns { flex-direction: row; } }
+        
+        .btn-create { background: var(--success-color); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; flex: 1; }
+        .btn-update { background: #d69e2e; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; flex: 1; display: none; }
+        .btn-cancel { background: var(--text-secondary); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; flex: 1; display: none; }
+
+        .search-bar { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 8px; background: transparent; color: var(--text-primary); font-size: 1rem; }
+        
+        /* TABLA CON SCROLL HORIZONTAL PARA MÓVILES */
+        .table-wrapper { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--border-color); border-radius: 8px; }
+        .table-container { max-height: 400px; overflow-y: auto; }
+        table { width: 100%; min-width: 600px; border-collapse: collapse; text-align: left; }
+        th, td { padding: 12px 15px; border-bottom: 1px solid var(--border-color); font-size: 0.95rem; }
+        th { background: var(--bg-color); position: sticky; top: 0; z-index: 1; }
+        .td-actions { display: flex; gap: 8px; }
+        .btn-edit { background: var(--accent-color); color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; }
+        .btn-delete { background: var(--alert-color); color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
     <nav>
-        <button id="theme-toggle" class="theme-btn" aria-label="Cambiar modo de color">🌙 Modo Oscuro</button>
+        <button id="admin-toggle" class="nav-btn">⚙️ Administrar</button>
+        <button id="theme-toggle" class="nav-btn">🌙 Oscuro</button>
     </nav>
 
     <header>
         <h1>Traductor Diidxazá</h1>
-        <p>Tecnología para preservar nuestras raíces</p>
+        <p>Preservando nuestra lengua zapoteca</p>
     </header>
 
-    <div class="word-of-day" aria-label="Palabra del día">
-        <div>
-            <span style="color: var(--text-secondary); font-size: 0.9rem;">Palabra del día</span><br>
-            <span id="wod-es">Cargando...</span>
-        </div>
-        <div class="wod-zapotec" id="wod-zap">...</div>
-    </div>
-
-    <main class="translator-container">
-        <section class="translation-box">
+    <main class="main-container">
+        <section class="translation-box" id="translator-section">
             <div class="panel">
-                <select id="lang-source" class="lang-select" aria-label="Idioma de origen">
+                <select id="lang-source" class="lang-select">
                     <option value="es" selected>Español</option>
                     <option value="zap">Zapoteco</option>
                 </select>
-                <textarea id="input-text" placeholder="Escribe la palabra aquí..." aria-label="Texto a traducir"></textarea>
+                <textarea id="input-text" placeholder="Escribe la palabra aquí..."></textarea>
             </div>
 
-            <button id="swap-btn" class="swap-btn" aria-label="Invertir idiomas" title="Invertir idiomas">⇄</button>
+            <button id="swap-btn" class="swap-btn" title="Invertir idiomas">⇅</button>
 
             <div class="panel">
-                <select id="lang-target" class="lang-select" aria-label="Idioma de destino">
+                <select id="lang-target" class="lang-select">
                     <option value="zap" selected>Zapoteco</option>
                     <option value="es">Español</option>
                 </select>
-                <textarea id="output-text" placeholder="Traducción" readonly aria-label="Resultado de la traducción"></textarea>
+                <textarea id="output-text" placeholder="Traducción" readonly></textarea>
                 
-                <div id="description-box" class="description-box" aria-live="polite">
+                <div id="description-box" class="description-box">
                     <em>La descripción aparecerá aquí...</em>
                 </div>
             </div>
+            <button id="translate-btn" class="primary-btn" style="grid-column: 1 / -1; margin-top: 10px;">Traducir Palabra</button>
         </section>
 
-        <button id="translate-btn" class="primary-btn">Traducir Palabra</button>
+        <section id="crud-section">
+            <div class="crud-header">
+                <h2>Base de Datos</h2>
+                <span id="total-words" style="color: var(--accent-color); font-weight: bold;"></span>
+            </div>
+
+            <div class="crud-form">
+                <input type="hidden" id="edit-id">
+                <input type="text" id="crud-es" placeholder="Palabra en Español" required>
+                <input type="text" id="crud-zap" placeholder="Palabra en Zapoteco" required>
+                <input type="text" id="crud-desc" class="full-width" placeholder="Descripción de la palabra" required>
+                
+                <div class="action-btns">
+                    <button id="btn-create" class="btn-create">➕ Crear Palabra</button>
+                    <button id="btn-update" class="btn-update">💾 Guardar Cambios</button>
+                    <button id="btn-cancel" class="btn-cancel">✖ Cancelar</button>
+                </div>
+            </div>
+
+            <input type="text" id="crud-search" class="search-bar" placeholder="🔍 Buscar palabra...">
+            
+            <div class="table-wrapper">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Español</th>
+                                <th>Zapoteco</th>
+                                <th>Descripción</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="crud-table-body">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
     </main>
 
     <script>
-        // 1. BASE DE DATOS INICIAL (Diccionario por defecto)
+        // --- 1. BASE DE DATOS Y PERSISTENCIA ---
         const diccionarioBase = [
             { es: "gente", zap: "binni", desc: "Conjunto de personas o individuo" },
             { es: "mujer", zap: "gunaa", desc: "Persona de sexo femenino" },
             { es: "hombre", zap: "nguiu", desc: "Persona de sexo masculino" },
             { es: "niño", zap: "bidxiña", desc: "Persona pequeña en crecimiento" },
+            { es: "niña", zap: "xquidxiña", desc: "Mujer pequeña en crecimiento" },
             { es: "madre", zap: "naa", desc: "Mujer que cuida y da vida" },
             { es: "padre", zap: "xtaa", desc: "Hombre que cuida y protege" },
+            { es: "hermano", zap: "bidxa", desc: "Familiar masculino" },
+            { es: "hermana", zap: "biza", desc: "Familiar femenino" },
+            { es: "comunidad", zap: "binni guenda", desc: "Grupo de personas organizadas" },
             { es: "pueblo", zap: "guidxi", desc: "Lugar donde vive una comunidad" },
+            { es: "cabeza", zap: "ique", desc: "Parte superior del cuerpo humano" },
+            { es: "pie", zap: "nii", desc: "Extremidad inferior para caminar" },
+            { es: "nariz", zap: "xquidxe", desc: "Órgano del olfato y respiración" },
+            { es: "oreja", zap: "diaga", desc: "Órgano de la audición" },
+            { es: "diente", zap: "layu", desc: "Pieza ósea en la boca para masticar" },
             { es: "sangre", zap: "rini", desc: "Líquido vital del cuerpo humano" },
+            { es: "mano", zap: "na", desc: "Extremidad para agarrar objetos" },
             { es: "corazón", zap: "ladxi", desc: "Órgano que bombea sangre (sentimientos)" },
+            { es: "corazón", zap: "xtena", desc: "Órgano vital del sistema circulatorio" },
+            { es: "boca", zap: "zaa", desc: "Parte del cuerpo para hablar y comer" },
             { es: "palabra", zap: "didxa", desc: "Sonido que expresa una idea" },
             { es: "agua", zap: "nisa", desc: "Líquido vital para la existencia" },
             { es: "tierra", zap: "yoo", desc: "Suelo donde se cultiva" },
             { es: "flor", zap: "guie'", desc: "Parte de la planta, símbolo de belleza" },
+            { es: "pez", zap: "bela", desc: "Animal acuático" },
             { es: "maíz", zap: "doo", desc: "Grano, alimento básico ancestral" },
             { es: "árbol", zap: "yaga", desc: "Planta grande con tronco leñoso" },
             { es: "sol", zap: "gubidxa", desc: "Estrella que da luz y calor" },
+            { es: "viento", zap: "biu", desc: "Corriente de aire natural" },
             { es: "fuego", zap: "guié", desc: "Energía que produce calor y luz" },
+            { es: "venado", zap: "bidxa", desc: "Animal salvaje de gran agilidad" },
+            { es: "nube", zap: "chupa", desc: "Masa de vapor suspendida en el cielo" },
+            { es: "lluvia", zap: "zaa", desc: "Precipitación pluvial" },
+            { es: "estrella", zap: "xquidxe", desc: "Cuerpo celeste que brilla en la noche" },
+            { es: "río", zap: "nisa gucá", desc: "Corriente natural de agua" },
+            { es: "mar", zap: "nisadó'", desc: "Gran masa de agua salada" },
+            { es: "montaña", zap: "dani", desc: "Gran elevación natural del terreno" },
+            { es: "piedra", zap: "guiee", desc: "Materia mineral sólida" },
+            { es: "perro", zap: "biguie'", desc: "Canino doméstico" },
+            { es: "gato", zap: "migu", desc: "Felino doméstico ágil" },
+            { es: "nombre", zap: "guié", desc: "Identificación de una persona" },
+            { es: "casa", zap: "sti", desc: "Hogar o vivienda familiar" },
             { es: "amor", zap: "guendaró", desc: "Sentimiento de profundo afecto" },
+            { es: "día", zap: "dxi", desc: "Periodo de 24 horas o luz solar" },
             { es: "vida", zap: "guenda", desc: "Estado de existencia de seres vivos" },
+            { es: "fiesta", zap: "guenda guca", desc: "Evento social de celebración" },
+            { es: "trabajo", zap: "dxiña", desc: "Actividad física o mental productiva" },
+            { es: "luz", zap: "biaani", desc: "Energía que ilumina el entorno" },
+            { es: "idioma", zap: "guenda sti", desc: "Lengua propia para comunicarse" },
+            { es: "comer", zap: "rusu", desc: "Acción de alimentarse" },
+            { es: "beber", zap: "ruchaa", desc: "Ingerir líquidos para hidratarse" },
+            { es: "hacer", zap: "guca", desc: "Realizar o producir algo" },
+            { es: "saber", zap: "nanda", desc: "Poseer conocimiento de algo" },
+            { es: "ver", zap: "guni", desc: "Percibir a través de los ojos" },
+            { es: "amar", zap: "rini guendaró", desc: "Sentir afecto profundo" },
+            { es: "vivo", zap: "nabani", desc: "Que tiene signos de vida" },
+            { es: "yo", zap: "naa ti", desc: "Pronombre primera persona" },
+            { es: "tú", zap: "luu", desc: "Pronombre segunda persona" },
+            { es: "no", zap: "cadi", desc: "Partícula de negación" },
             { es: "gracias", zap: "xquixe pe'", desc: "Expresión de profunda gratitud" },
-            { es: "hola", zap: "guidxi", desc: "Saludo común (literalmente 'pueblo')" }
+            { es: "hola", zap: "guidxi", desc: "Saludo común" },
+            { es: "bonito", zap: "sicarú", desc: "Atractivo a la vista" },
+            { es: "verdad", zap: "dxandí'", desc: "Cierto, conforme a la realidad" }
         ];
 
-        // 2. SISTEMA DE PERSISTENCIA (LocalStorage)
-        // Carga el diccionario guardado en el navegador, si no existe, carga el base.
         let diccionario = JSON.parse(localStorage.getItem('diccionarioZapoteco')) || diccionarioBase;
 
-        // Guarda el diccionario actualizado en el navegador
         function guardarDatos() {
             localStorage.setItem('diccionarioZapoteco', JSON.stringify(diccionario));
+            renderTable();
         }
 
-        // Elementos del DOM
+        // --- 2. LÓGICA DEL TRADUCTOR ---
         const inputText = document.getElementById('input-text');
         const outputText = document.getElementById('output-text');
         const langSource = document.getElementById('lang-source');
         const langTarget = document.getElementById('lang-target');
         const descBox = document.getElementById('description-box');
-        const translationBox = document.querySelector('.translation-box'); 
-        const themeBtn = document.getElementById('theme-toggle');
 
-        // 3. MODO OSCURO
-        themeBtn.addEventListener('click', () => {
-            const isDark = document.body.getAttribute('data-theme') === 'dark';
-            if (isDark) {
-                document.body.removeAttribute('data-theme');
-                themeBtn.textContent = '🌙 Modo Oscuro';
-            } else {
-                document.body.setAttribute('data-theme', 'dark');
-                themeBtn.textContent = '☀️ Modo Claro';
-            }
-        });
-
-        // 4. PALABRA DEL DÍA (Aleatoria)
-        function cargarPalabraDelDia() {
-            // Filtramos las palabras pendientes para no mostrarlas como palabra del día
-            const palabrasValidas = diccionario.filter(p => !p.zap.includes("[Pendiente]") && !p.es.includes("[Pendiente]"));
-            const randomItem = palabrasValidas[Math.floor(Math.random() * palabrasValidas.length)];
-            document.getElementById('wod-es').textContent = randomItem.es.charAt(0).toUpperCase() + randomItem.es.slice(1);
-            document.getElementById('wod-zap').textContent = randomItem.zap;
-        }
-        cargarPalabraDelDia();
-
-        // 5. EFECTOS SENSORIALES
-        function aplicarEfecto(palabra) {
-            translationBox.className = 'translation-box'; // Resetea clases
-
-            const agua = ['agua', 'nisa', 'lluvia', 'mar'];
-            const sangre = ['sangre', 'rini', 'corazón', 'ladxi', 'amor', 'guendaró'];
-            const fuego = ['fuego', 'guié', 'sol', 'gubidxa'];
-            const naturaleza = ['tierra', 'yoo', 'árbol', 'yaga', 'flor', 'guie\'', 'maíz', 'doo'];
-
-            if (agua.includes(palabra)) translationBox.classList.add('effect-water');
-            else if (sangre.includes(palabra)) translationBox.classList.add('effect-blood');
-            else if (fuego.includes(palabra)) translationBox.classList.add('effect-fire');
-            else if (naturaleza.includes(palabra)) translationBox.classList.add('effect-nature');
-        }
-
-        // 6. MOTOR DE TRADUCCIÓN MEJORADO
         function traducir() {
             const palabra = inputText.value.trim().toLowerCase();
             const origen = langSource.value;
-            const destino = langTarget.value;
-
+            
             if (palabra === "") {
                 outputText.value = "";
                 descBox.innerHTML = "<em>La descripción aparecerá aquí...</em>";
                 descBox.className = 'description-box';
-                translationBox.className = 'translation-box';
                 return;
             }
 
-            aplicarEfecto(palabra);
-
-            let resultados = diccionario.filter(item => origen === 'es' ? item.es === palabra : item.zap === palabra);
+            let resultados = diccionario.filter(item => origen === 'es' ? item.es.toLowerCase() === palabra : item.zap.toLowerCase() === palabra);
 
             if (resultados.length > 0) {
                 let traducciones = resultados.map(r => origen === 'es' ? r.zap : r.es);
                 outputText.value = [...new Set(traducciones)].join(" / ");
                 
-                let htmlDescripciones = "<strong>Significados encontrados:</strong><br><br>";
-                resultados.forEach(r => {
-                    let palabraDestino = origen === 'es' ? r.zap : r.es;
-                    htmlDescripciones += `• <strong>${palabraDestino}</strong>: ${r.desc}<br>`;
-                });
-
+                let htmlDescripciones = "<strong>Significados:</strong><br>";
+                resultados.forEach(r => { htmlDescripciones += `• ${r.desc}<br>`; });
                 descBox.innerHTML = htmlDescripciones;
                 descBox.className = 'description-box';
             } else {
                 outputText.value = "Palabra no encontrada.";
-                descBox.innerHTML = "<strong>¡Aporte a la comunidad!</strong> Palabra guardada en la base local del navegador para futura revisión.";
+                descBox.innerHTML = "Si conoces esta palabra, ve al panel de Administración para agregarla.";
                 descBox.className = 'description-box not-found';
-                translationBox.className = 'translation-box';
-
-                // Auto-guardado persistente
-                let yaExiste = diccionario.find(item => item.es === palabra || item.zap === palabra);
-                if (!yaExiste) {
-                    if (origen === 'es') {
-                        diccionario.push({ es: palabra, zap: "[Pendiente]", desc: "Aportación de usuario." });
-                    } else {
-                        diccionario.push({ es: "[Pendiente]", zap: palabra, desc: "Aportación de usuario." });
-                    }
-                    guardarDatos(); // ¡La magia sucede aquí!
-                }
             }
         }
 
-        // 7. INTERCAMBIO Y EVENTOS
+        document.getElementById('translate-btn').addEventListener('click', traducir);
         document.getElementById('swap-btn').addEventListener('click', () => {
-            let tempLang = langSource.value;
-            langSource.value = langTarget.value;
-            langTarget.value = tempLang;
-            
+            let tempLang = langSource.value; langSource.value = langTarget.value; langTarget.value = tempLang;
             let tempText = inputText.value;
             if(tempText && !outputText.value.includes("no encontrada")) {
-                inputText.value = outputText.value.split(" / ")[0]; 
-                traducir();
+                inputText.value = outputText.value.split(" / ")[0]; traducir();
+            } else { inputText.value = ""; outputText.value = ""; descBox.innerHTML = "<em>La descripción aparecerá aquí...</em>"; }
+        });
+        inputText.addEventListener('keyup', (e) => { if (e.key === 'Enter') traducir(); });
+
+        // --- 3. SISTEMA CRUD (ADMINISTRACIÓN) ---
+        const tableBody = document.getElementById('crud-table-body');
+        const searchInput = document.getElementById('crud-search');
+        
+        const idEdit = document.getElementById('edit-id');
+        const inputEs = document.getElementById('crud-es');
+        const inputZap = document.getElementById('crud-zap');
+        const inputDesc = document.getElementById('crud-desc');
+        const btnCreate = document.getElementById('btn-create');
+        const btnUpdate = document.getElementById('btn-update');
+        const btnCancel = document.getElementById('btn-cancel');
+
+        function renderTable(filtro = "") {
+            tableBody.innerHTML = "";
+            let contador = 0;
+            
+            diccionario.forEach((item, index) => {
+                if(item.es.toLowerCase().includes(filtro.toLowerCase()) || item.zap.toLowerCase().includes(filtro.toLowerCase())) {
+                    contador++;
+                    let row = `<tr>
+                        <td>${item.es}</td>
+                        <td><strong>${item.zap}</strong></td>
+                        <td>${item.desc}</td>
+                        <td class="td-actions">
+                            <button class="btn-edit" onclick="cargarEdicion(${index})">✏️</button>
+                            <button class="btn-delete" onclick="eliminarPalabra(${index})">🗑️</button>
+                        </td>
+                    </tr>`;
+                    tableBody.innerHTML += row;
+                }
+            });
+            document.getElementById('total-words').textContent = `Total de palabras: ${contador}`;
+        }
+
+        btnCreate.addEventListener('click', () => {
+            if(!inputEs.value || !inputZap.value || !inputDesc.value) { alert("Llena todos los campos."); return; }
+            diccionario.unshift({ es: inputEs.value.toLowerCase(), zap: inputZap.value.toLowerCase(), desc: inputDesc.value });
+            limpiarFormulario();
+            guardarDatos();
+            alert("Palabra agregada con éxito.");
+        });
+
+        window.cargarEdicion = function(index) {
+            idEdit.value = index;
+            inputEs.value = diccionario[index].es;
+            inputZap.value = diccionario[index].zap;
+            inputDesc.value = diccionario[index].desc;
+            
+            btnCreate.style.display = "none";
+            btnUpdate.style.display = "block";
+            btnCancel.style.display = "block";
+            document.getElementById('crud-es').focus(); // Manda la pantalla hacia arriba
+        };
+
+        btnUpdate.addEventListener('click', () => {
+            let index = idEdit.value;
+            diccionario[index] = { es: inputEs.value.toLowerCase(), zap: inputZap.value.toLowerCase(), desc: inputDesc.value };
+            limpiarFormulario();
+            guardarDatos();
+            alert("Palabra actualizada correctamente.");
+        });
+
+        window.eliminarPalabra = function(index) {
+            if(confirm(`¿Seguro que quieres borrar "${diccionario[index].es} - ${diccionario[index].zap}"?`)) {
+                diccionario.splice(index, 1);
+                guardarDatos();
+            }
+        };
+
+        btnCancel.addEventListener('click', limpiarFormulario);
+
+        function limpiarFormulario() {
+            idEdit.value = ""; inputEs.value = ""; inputZap.value = ""; inputDesc.value = "";
+            btnCreate.style.display = "block"; btnUpdate.style.display = "none"; btnCancel.style.display = "none";
+        }
+
+        searchInput.addEventListener('keyup', (e) => { renderTable(e.target.value); });
+
+        // --- 4. EXTRAS ---
+        document.getElementById('theme-toggle').addEventListener('click', (e) => {
+            const isDark = document.body.getAttribute('data-theme') === 'dark';
+            document.body.setAttribute('data-theme', isDark ? '' : 'dark');
+            e.target.textContent = isDark ? '🌙 Oscuro' : '☀️ Claro';
+        });
+
+        document.getElementById('admin-toggle').addEventListener('click', () => {
+            const crudSection = document.getElementById('crud-section');
+            if(crudSection.style.display === "block") {
+                crudSection.style.display = "none";
             } else {
-                inputText.value = "";
-                outputText.value = "";
-                descBox.innerHTML = "<em>La descripción aparecerá aquí...</em>";
-                descBox.className = 'description-box';
+                crudSection.style.display = "block";
+                renderTable(); 
             }
         });
 
-        document.getElementById('translate-btn').addEventListener('click', traducir);
-        inputText.addEventListener('keyup', (e) => { if (e.key === 'Enter') traducir(); });
+        renderTable();
     </script>
 </body>
 </html>
