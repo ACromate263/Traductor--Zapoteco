@@ -47,8 +47,9 @@
         header p { color: var(--text-secondary); font-weight: 500; font-size: clamp(0.9rem, 3vw, 1.1rem); }
 
         /* TRADUCTOR PRINCIPAL RESPONSIVO */
-        .main-container { width: 100%; max-width: 900px; }
-        .translation-box { display: flex; flex-direction: column; gap: 15px; background: var(--panel-bg); padding: 20px; border-radius: 16px; box-shadow: var(--card-shadow); margin-bottom: 20px; }
+        .main-container { width: 100%; max-width: 900px; display: flex; flex-direction: column; align-items: center; }
+        
+        .translation-box { width: 100%; display: flex; flex-direction: column; gap: 15px; background: var(--panel-bg); padding: 20px; border-radius: 16px; box-shadow: var(--card-shadow); margin-bottom: 20px; }
         @media (min-width: 768px) { .translation-box { flex-direction: row; align-items: stretch; padding: 30px; } }
         
         .panel { flex: 1; display: flex; flex-direction: column; gap: 12px; }
@@ -63,11 +64,12 @@
         .description-box.not-found { background-color: rgba(229, 62, 62, 0.1); border-left-color: var(--alert-color); }
 
         .swap-btn { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 50%; width: 45px; height: 45px; font-size: 1.2rem; cursor: pointer; align-self: center; color: var(--text-secondary); box-shadow: var(--card-shadow); display: flex; align-items: center; justify-content: center; }
-        @media (min-width: 768px) { .swap-btn { width: 50px; height: 50px; font-size: 1.4rem; transform: rotate(90deg); } } /* Gira la flecha en escritorio */
+        @media (min-width: 768px) { .swap-btn { width: 50px; height: 50px; font-size: 1.4rem; transform: rotate(90deg); } }
         .swap-btn:hover { color: var(--accent-color); border-color: var(--accent-color); transform: scale(1.05); }
         @media (min-width: 768px) { .swap-btn:hover { transform: rotate(90deg) scale(1.05); } }
 
-        .primary-btn { display: block; width: 100%; padding: 15px 20px; background: linear-gradient(135deg, var(--accent-color), #2b6cb0); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(49, 130, 206, 0.4); transition: transform 0.2s; }
+        /* BOTÓN TRADUCIR ARREGLADO */
+        .primary-btn { display: block; width: 100%; max-width: 300px; padding: 15px 20px; margin: 0 auto 20px auto; background: linear-gradient(135deg, var(--accent-color), #2b6cb0); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(49, 130, 206, 0.4); transition: transform 0.2s; }
         .primary-btn:hover { transform: translateY(-2px); }
 
         /* PANEL CRUD RESPONSIVO */
@@ -78,7 +80,6 @@
         .crud-header { display: flex; flex-direction: column; gap: 5px; margin-bottom: 20px; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
         @media (min-width: 600px) { .crud-header { flex-direction: row; justify-content: space-between; align-items: center; } }
         
-        /* Formulario Grid adaptativo */
         .crud-form { display: grid; grid-template-columns: 1fr; gap: 15px; margin-bottom: 25px; }
         @media (min-width: 768px) { .crud-form { grid-template-columns: 1fr 1fr; } }
         
@@ -95,7 +96,6 @@
 
         .search-bar { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 8px; background: transparent; color: var(--text-primary); font-size: 1rem; }
         
-        /* TABLA CON SCROLL HORIZONTAL PARA MÓVILES */
         .table-wrapper { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--border-color); border-radius: 8px; }
         .table-container { max-height: 400px; overflow-y: auto; }
         table { width: 100%; min-width: 600px; border-collapse: collapse; text-align: left; }
@@ -141,8 +141,9 @@
                     <em>La descripción aparecerá aquí...</em>
                 </div>
             </div>
-            <button id="translate-btn" class="primary-btn" style="grid-column: 1 / -1; margin-top: 10px;">Traducir Palabra</button>
         </section>
+        
+        <button id="translate-btn" class="primary-btn">Traducir Palabra</button>
 
         <section id="crud-section">
             <div class="crud-header">
@@ -356,7 +357,7 @@
             btnCreate.style.display = "none";
             btnUpdate.style.display = "block";
             btnCancel.style.display = "block";
-            document.getElementById('crud-es').focus(); // Manda la pantalla hacia arriba
+            document.getElementById('crud-es').focus(); 
         };
 
         btnUpdate.addEventListener('click', () => {
