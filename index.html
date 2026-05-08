@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta property="og:title" content="Traductor Diidxazá - Español">
+    <meta property="og:description" content="Aprende y preserva la lengua zapoteca con este traductor interactivo.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1518640467707-6811f4a6ab73?q=80&w=1000&auto=format&fit=crop">
+
+    <title>Traductor Diidxazá - Español</title>
+    
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --panel-bg: #ffffff;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --accent-color: #1a73e8; 
+            --accent-hover: #1557b0;
+            --border-color: #dadce0;
+            --alert-color: #d93025; 
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .translator-container {
+            width: 100%;
+            max-width: 900px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            color: var(--text-primary);
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .translation-box {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: var(--panel-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: box-shadow 0.5s ease, background 0.5s ease, border 0.5s ease;
+        }
+
+        @media (min-width: 768px) {
+            .translation-box {
+                flex-direction: row;
+                align-items: stretch;
+            }
+        }
+
+        .panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .lang-select {
+            padding: 10px;
+            border: none;
+            border-bottom: 2px solid var(--border-color);
+            font-size: 1.1rem;
+            color: var(--accent-color);
+            font-weight: bold;
+            background: transparent;
+            cursor: pointer;
+            outline: none;
+        }
+
+        textarea {
+            width: 100%;
+            height: 130px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            resize: none;
+            font-size: 1.2rem;
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: var(--accent-color);
+        }
+
+        #output-text {
+            background-color: #f8f9fa;
+            color: var(--accent-color);
+            font-weight: 500;
+        }
+
+        .description-box {
+            background-color: #e8f0fe;
+            color: var(--text-primary);
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            margin-top: 5px;
+            border-left: 4px solid var(--accent-color);
+            line-height: 1.5;
+        }
+
+        .description-box.not-found {
+            background-color: #fce8e6;
+            color: var(--alert-color);
+            border-left-color: var(--alert-color);
+        }
+
+        .swap-btn {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            align-self: center;
+            z-index: 1;
+            color: var(--text-secondary);
+            transition: 0.3s;
+        }
+
+        .swap-btn:hover {
+            color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .primary-btn {
+            display: block;
+            width: 100%;
+            max-width: 250px;
+            margin: 25px auto 0;
+            padding: 14px 24px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(26, 115, 232, 0.3);
+        }
+
+        .primary-btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        /* EFECTOS VISUALES ANIMADOS */
+        .effect-water {
+            box-shadow: 0 0 25px rgba(0, 168, 255, 0.4);
+            background: linear-gradient(to bottom right, #ffffff, #e0f7fa);
+            border: 1px solid #00a8ff;
+        }
+
+        .effect-blood {
+            animation: latido 1.2s infinite;
+            background: linear-gradient(to bottom right, #ffffff, #ffebee);
+            border: 1px solid #e84118;
+        }
+        @keyframes latido {
+            0% { box-shadow: 0 0 10px rgba(232, 65, 24, 0.3); transform: scale(1); }
+            50% { box-shadow: 0 0 30px rgba(232, 65, 24, 0.6); transform: scale(1.02); }
+            100% { box-shadow: 0 0 10px rgba(232, 65, 24, 0.3); transform: scale(1); }
+        }
+
+        .effect-fire {
+            box-shadow: 0 0 30px rgba(255, 159, 67, 0.6);
+            background: linear-gradient(to bottom right, #ffffff, #fff3e0);
+            border: 1px solid #ff9f43;
+        }
+
+        .effect-nature {
+            box-shadow: 0 0 25px rgba(76, 209, 55, 0.5);
+            background: linear-gradient(to bottom right, #ffffff, #e8f5e9);
+            border: 1px solid #4cd137;
+        }
+
+        .effect-wind {
+            animation: viento 2s infinite alternate ease-in-out;
+            box-shadow: 0 0 20px rgba(200, 214, 229, 0.6);
+        }
+        @keyframes viento {
+            0% { transform: translateX(-4px); }
+            100% { transform: translateX(4px); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="translator-container">
+        <header>
+            <h1>Traductor Diidxazá</h1>
+            <p>Preservando nuestra lengua zapoteca</p>
+        </header>
+
+        <div class="translation-box">
+            <div class="panel">
+                <select id="lang-source" class="lang-select">
+                    <option value="es" selected>Español</option>
+                    <option value="zap">Zapoteco</option>
+                </select>
+                <textarea id="input-text" placeholder="Escribe la palabra aquí..."></textarea>
+            </div>
+
+            <button id="swap-btn" class="swap-btn" title="Invertir idiomas">⇄</button>
+
+            <div class="panel">
+                <select id="lang-target" class="lang-select">
+                    <option value="zap" selected>Zapoteco</option>
+                    <option value="es">Español</option>
+                </select>
+                <textarea id="output-text" placeholder="Traducción" readonly></textarea>
+                
+                <div id="description-box" class="description-box">
+                    <em>La descripción aparecerá aquí...</em>
+                </div>
+            </div>
+        </div>
+
+        <button id="translate-btn" class="primary-btn">Traducir Palabra</button>
+    </div>
+
+    <script>
+        let diccionario = [
+            { es: "gente", zap: "binni", desc: "Conjunto de personas o individuo" },
+            { es: "persona", zap: "binni", desc: "Individuo de la especie humana" },
+            { es: "mujer", zap: "gunaa", desc: "Persona de sexo femenino" },
+            { es: "mujer", zap: "xquidxe", desc: "Persona de sexo femenino (variante)" },
+            { es: "hombre", zap: "nguiu", desc: "Persona de sexo masculino" },
+            { es: "niño", zap: "bidxiña", desc: "Persona pequeña en crecimiento" },
+            { es: "niña", zap: "xquidxiña", desc: "Mujer pequeña en crecimiento" },
+            { es: "niño", zap: "xtiidxi", desc: "Persona en la etapa de la niñez" },
+            { es: "madre", zap: "naa", desc: "Mujer que cuida y da vida" },
+            { es: "padre", zap: "xtaa", desc: "Hombre que cuida y protege" },
+            { es: "padre", zap: "xii", desc: "Figura paterna (variante)" },
+            { es: "hermano", zap: "bidxa", desc: "Familiar masculino" },
+            { es: "hermana", zap: "biza", desc: "Familiar femenino" },
+            { es: "comunidad", zap: "binni guenda", desc: "Grupo de personas organizadas" },
+            { es: "pueblo", zap: "guidxi", desc: "Lugar donde vive una comunidad" },
+            { es: "cabeza", zap: "ique", desc: "Parte superior del cuerpo humano" },
+            { es: "pie", zap: "nii", desc: "Extremidad inferior para caminar" },
+            { es: "nariz", zap: "xquidxe", desc: "Órgano del olfato y respiración" },
+            { es: "oreja", zap: "diaga", desc: "Órgano de la audición" },
+            { es: "diente", zap: "layu", desc: "Pieza ósea en la boca para masticar" },
+            { es: "sangre", zap: "rini", desc: "Líquido vital del cuerpo humano" },
+            { es: "mano", zap: "na", desc: "Extremidad para agarrar objetos" },
+            { es: "corazón", zap: "ladxi", desc: "Órgano que bombea sangre (sentimientos)" },
+            { es: "corazón", zap: "xtena", desc: "Órgano vital del sistema circulatorio" },
+            { es: "boca", zap: "zaa", desc: "Parte del cuerpo para hablar y comer" },
+            { es: "palabra", zap: "raa", desc: "Unidad del lenguaje o cavidad oral" },
+            { es: "palabra", zap: "didxa", desc: "Sonido que expresa una idea" },
+            { es: "agua", zap: "nisa", desc: "Líquido vital para la existencia" },
+            { es: "agua de lluvia", zap: "nisa zaa", desc: "Agua recolectada de la lluvia" },
+            { es: "tierra", zap: "yoo", desc: "Suelo donde se cultiva" },
+            { es: "flor", zap: "guie'", desc: "Parte de la planta, símbolo de belleza" },
+            { es: "pez", zap: "bela", desc: "Animal acuático" },
+            { es: "maíz", zap: "doo", desc: "Grano, alimento básico ancestral" },
+            { es: "maíz", zap: "xuba", desc: "Semilla fundamental de la dieta local" },
+            { es: "hoja", zap: "guixi", desc: "Órgano vegetal que brota del tallo" },
+            { es: "hoja", zap: "yaga guie'", desc: "Follaje de los árboles" },
+            { es: "árbol", zap: "yaga", desc: "Planta grande con tronco leñoso" },
+            { es: "sol", zap: "gubidxa", desc: "Estrella que da luz y calor" },
+            { es: "viento", zap: "biu", desc: "Corriente de aire natural" },
+            { es: "viento", zap: "bi'", desc: "Aire en movimiento (variante)" },
+            { es: "planta", zap: "guie' sti'", desc: "Ser vivo que crece en la tierra" },
+            { es: "fuego", zap: "guié", desc: "Energía que produce calor y luz" },
+            { es: "venado", zap: "bidxa", desc: "Animal salvaje de gran agilidad" },
+            { es: "nube", zap: "chupa", desc: "Masa de vapor suspendida en el cielo" },
+            { es: "lluvia", zap: "nisa guie", desc: "Agua que cae de las nubes" },
+            { es: "lluvia", zap: "zaa", desc: "Precipitación pluvial" },
+            { es: "estrella", zap: "xquidxe", desc: "Cuerpo celeste que brilla en la noche" },
+            { es: "amanecer", zap: "gubidxa guie", desc: "Inicio del día con la luz solar" },
+            { es: "aire", zap: "bidxi", desc: "Mezcla de gases que respiramos" },
+            { es: "río", zap: "nisa gucá", desc: "Corriente natural de agua" },
+            { es: "río", zap: "yoo nisa", desc: "Lecho de agua dulce" },
+            { es: "mar", zap: "nisadó'", desc: "Gran masa de agua salada" },
+            { es: "montaña", zap: "dani", desc: "Gran elevación natural del terreno" },
+            { es: "montaña", zap: "guie chupa", desc: "Elevación geográfica importante" },
+            { es: "piedra", zap: "guiee", desc: "Materia mineral sólida" },
+            { es: "arena", zap: "yuxi", desc: "Partículas pequeñas de roca" },
+            { es: "animal", zap: "badu guie", desc: "Ser vivo con movimiento propio" },
+            { es: "fruta", zap: "zaa guie", desc: "Fruto comestible y dulce" },
+            { es: "semilla", zap: "naa guie", desc: "Parte que da origen a nuevas plantas" },
+            { es: "cielo", zap: "xquidxe guie", desc: "Espacio infinito sobre la Tierra" },
+            { es: "perro", zap: "biguie'", desc: "Canino doméstico" },
+            { es: "perro", zap: "badu", desc: "Animal doméstico fiel" },
+            { es: "gato", zap: "migu", desc: "Felino doméstico ágil" },
+            { es: "nombre", zap: "guié", desc: "Identificación de una persona" },
+            { es: "nombre propio", zap: "laani", desc: "Nombre específico para distinguir a alguien" },
+            { es: "casa", zap: "sti", desc: "Hogar o vivienda familiar" },
+            { es: "casa", zap: "yoo", desc: "Vivienda física" },
+            { es: "escuela", zap: "yoo bigu", desc: "Lugar destinado al aprendizaje" },
+            { es: "amor", zap: "guendaró", desc: "Sentimiento de profundo afecto" },
+            { es: "día", zap: "dxi", desc: "Periodo de 24 horas o luz solar" },
+            { es: "día en casa", zap: "gubidxa yoo", desc: "Estancia diurna en el hogar" },
+            { es: "vida", zap: "guenda", desc: "Estado de existencia de seres vivos" },
+            { es: "fiesta", zap: "guenda guca", desc: "Evento social de celebración" },
+            { es: "trabajo", zap: "dxiña", desc: "Actividad física o mental productiva" },
+            { es: "trabajo", zap: "guenda", desc: "Labor o esfuerzo creativo" },
+            { es: "luz", zap: "biaani", desc: "Energía que ilumina el entorno" },
+            { es: "idioma", zap: "guenda sti", desc: "Lengua propia para comunicarse" },
+            { es: "cultura", zap: "guendaró sti", desc: "Conjunto de costumbres y saberes" },
+            { es: "historia", zap: "guendaró dxi", desc: "Relato de sucesos pasados" },
+            { es: "salud", zap: "guenda rini", desc: "Estado de bienestar físico y mental" },
+            { es: "energía", zap: "guenda biaani", desc: "Capacidad para realizar acciones" },
+            { es: "tortilla", zap: "gueta", desc: "Alimento circular de masa de maíz" },
+            { es: "comer", zap: "rusu", desc: "Acción de alimentarse" },
+            { es: "comer", zap: "go", desc: "Ingerir alimentos (variante)" },
+            { es: "beber", zap: "ruchaa", desc: "Ingerir líquidos para hidratarse" },
+            { es: "hacer", zap: "guca", desc: "Realizar o producir algo" },
+            { es: "voy a hacer", zap: "naa guca", desc: "Intención de realizar una tarea" },
+            { es: "ir", zap: "ra", desc: "Trasladarse de un punto a otro" },
+            { es: "poder", zap: "raca", desc: "Tener la facultad o permiso de hacer algo" },
+            { es: "saber", zap: "nanda", desc: "Poseer conocimiento de algo" },
+            { es: "ver", zap: "guni", desc: "Percibir a través de los ojos" },
+            { es: "amar", zap: "rini guendaró", desc: "Sentir afecto profundo" },
+            { es: "vivo", zap: "nabani", desc: "Que tiene signos de vida" },
+            { es: "muerto", zap: "nati", desc: "Que ha perdido la vida" },
+            { es: "yo", zap: "naa ti", desc: "Pronombre primera persona" },
+            { es: "tú", zap: "luu", desc: "Pronombre segunda persona" },
+            { es: "nosotros", zap: "laaca", desc: "Pronombre primera persona plural" },
+            { es: "este", zap: "ndi", desc: "Indica cercanía espacial" },
+            { es: "aquí", zap: "ndi", desc: "Indica lugar cercano" },
+            { es: "eso", zap: "ndi'", desc: "Indica objeto o situación lejana" },
+            { es: "no", zap: "cadi", desc: "Partícula de negación" },
+            { es: "gracias", zap: "xquixe pe'", desc: "Expresión de profunda gratitud" },
+            { es: "hola", zap: "guidxi", desc: "Saludo común (literalmente 'pueblo')" },
+            { es: "hermoso", zap: "sicarú", desc: "Que tiene gran belleza" },
+            { es: "bonito", zap: "sicarú", desc: "Atractivo a la vista" },
+            { es: "dulce", zap: "naxhi", desc: "De sabor agradable" },
+            { es: "verdad", zap: "dxandí'", desc: "Cierto, conforme a la realidad" },
+            { es: "luna", zap: "beeu", desc: "Satélite natural de la Tierra" },
+            { es: "mes", zap: "beeu", desc: "Periodo de tiempo lunar" }
+        ];
+
+        const inputText = document.getElementById('input-text');
+        const outputText = document.getElementById('output-text');
+        const langSource = document.getElementById('lang-source');
+        const langTarget = document.getElementById('lang-target');
+        const btnTranslate = document.getElementById('translate-btn');
+        const btnSwap = document.getElementById('swap-btn');
+        const descBox = document.getElementById('description-box');
+        const translationBox = document.querySelector('.translation-box'); 
+
+        function aplicarEfecto(palabra) {
+            translationBox.classList.remove('effect-water', 'effect-blood', 'effect-fire', 'effect-nature', 'effect-wind');
+
+            const agua = ['agua', 'nisa', 'lluvia', 'mar', 'nisadó\'', 'río', 'zaa'];
+            const sangre = ['sangre', 'rini', 'corazón', 'ladxi', 'xtena', 'amor', 'guendaró'];
+            const fuego = ['fuego', 'guié', 'sol', 'gubidxa', 'luz', 'biaani', 'amanecer'];
+            const naturaleza = ['tierra', 'yoo', 'árbol', 'yaga', 'flor', 'guie\'', 'hoja', 'maíz', 'doo', 'planta'];
+            const viento = ['viento', 'biu', 'bi\'', 'aire', 'bidxi', 'nube', 'chupa'];
+
+            if (agua.includes(palabra)) translationBox.classList.add('effect-water');
+            else if (sangre.includes(palabra)) translationBox.classList.add('effect-blood');
+            else if (fuego.includes(palabra)) translationBox.classList.add('effect-fire');
+            else if (naturaleza.includes(palabra)) translationBox.classList.add('effect-nature');
+            else if (viento.includes(palabra)) translationBox.classList.add('effect-wind');
+        }
+
+        function traducir() {
+            const palabra = inputText.value.trim().toLowerCase();
+            const origen = langSource.value;
+            const destino = langTarget.value;
+
+            if (palabra === "") {
+                outputText.value = "";
+                descBox.innerHTML = "<em>La descripción aparecerá aquí...</em>";
+                descBox.classList.remove('not-found');
+                translationBox.classList.remove('effect-water', 'effect-blood', 'effect-fire', 'effect-nature', 'effect-wind');
+                return;
+            }
+
+            aplicarEfecto(palabra);
+
+            let resultados = [];
+            if (origen === 'es' && destino === 'zap') {
+                resultados = diccionario.filter(item => item.es === palabra);
+            } else if (origen === 'zap' && destino === 'es') {
+                resultados = diccionario.filter(item => item.zap === palabra);
+            }
+
+            if (resultados.length > 0) {
+                let traducciones = resultados.map(r => origen === 'es' ? r.zap : r.es);
+                outputText.value = [...new Set(traducciones)].join(" / ");
+                
+                let htmlDescripciones = "<strong>Significados encontrados:</strong><br><br>";
+                resultados.forEach(r => {
+                    let palabraDestino = origen === 'es' ? r.zap : r.es;
+                    htmlDescripciones += `• <strong>${palabraDestino}</strong>: ${r.desc}<br>`;
+                });
+
+                descBox.innerHTML = htmlDescripciones;
+                descBox.classList.remove('not-found');
+
+            } else {
+                outputText.value = "Palabra no encontrada.";
+                descBox.innerHTML = "<strong>¡Nueva palabra detectada!</strong> Se ha agregado temporalmente a la memoria.";
+                descBox.classList.add('not-found');
+                translationBox.classList.remove('effect-water', 'effect-blood', 'effect-fire', 'effect-nature', 'effect-wind');
+
+                let yaExiste = diccionario.find(item => item.es === palabra || item.zap === palabra);
+                if (!yaExiste) {
+                    if (origen === 'es') {
+                        diccionario.push({ es: palabra, zap: "[Pendiente]", desc: "Agregada por un usuario." });
+                    } else {
+                        diccionario.push({ es: "[Pendiente]", zap: palabra, desc: "Agregada por un usuario." });
+                    }
+                }
+            }
+        }
+
+        function intercambiarIdiomas() {
+            let tempLang = langSource.value;
+            langSource.value = langTarget.value;
+            langTarget.value = tempLang;
+            
+            let tempText = inputText.value;
+            inputText.value = outputText.value;
+            
+            if(inputText.value && !inputText.value.includes("no encontrada") && !inputText.value.includes("[Pendiente]")) {
+                inputText.value = inputText.value.split(" / ")[0]; 
+                traducir();
+            } else {
+                inputText.value = "";
+                outputText.value = "";
+                descBox.innerHTML = "<em>La descripción aparecerá aquí...</em>";
+                descBox.classList.remove('not-found');
+                translationBox.classList.remove('effect-water', 'effect-blood', 'effect-fire', 'effect-nature', 'effect-wind');
+            }
+        }
+
+        btnTranslate.addEventListener('click', traducir);
+        btnSwap.addEventListener('click', intercambiarIdiomas);
+        inputText.addEventListener('keyup', function (e) {
+            if (e.key === 'Enter') {
+                traducir();
+            }
+        });
+    </script>
+</body>
+</html>
