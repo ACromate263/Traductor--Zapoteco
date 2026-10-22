@@ -1,562 +1,363 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#1a73e8">
-    <title>Traductor Diidxazá - Español | Dashboard Pro</title>
-    
-    <style>
-        /* VARIABLES CSS */
-        :root {
-            --bg-color: #f0f4f8;
-            --panel-bg: #ffffff;
-            --text-primary: #2d3748;
-            --text-secondary: #718096;
-            --accent-color: #3182ce; 
-            --accent-hover: #2b6cb0;
-            --border-color: #e2e8f0;
-            --alert-color: #e53e3e;
-            --success-color: #38a169;
-            --card-shadow: 0 8px 20px rgba(0,0,0,0.06);
-            --transition-speed: 0.3s;
-        }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>CBTis 205 - Permisos y boletas</title>
+<style>
+/* Ajustes base para diseño móvil tipo App */
+body{margin:0;font-family:Arial,sans-serif;background:#f6f4f1;color:#222;font-size:16px; padding-bottom: 20px;}
+.top{background:#611232;color:#fff;padding:15px 14px;border-bottom:4px solid #a57f2c;text-align:center;}
+.top b{font-size:22px; display:block; margin-bottom: 4px;}
 
-        [data-theme="dark"] {
-            --bg-color: #1a202c;
-            --panel-bg: #2d3748;
-            --text-primary: #f7fafc;
-            --text-secondary: #a0aec0;
-            --border-color: #4a5568;
-            --card-shadow: 0 8px 20px rgba(0,0,0,0.3);
-        }
+/* Menú deslizable horizontal para celulares */
+.menu{
+  background:#611232; padding:8px; 
+  display: flex; overflow-x: auto; white-space: nowrap;
+  -webkit-overflow-scrolling: touch; /* Suavidad en iOS */
+  border-bottom: 2px solid #4a0e26;
+}
+/* Ocultar barra de scroll en el menú */
+.menu::-webkit-scrollbar { display: none; }
+.menu { -ms-overflow-style: none; scrollbar-width: none; }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; transition: background-color var(--transition-speed), color var(--transition-speed); }
+.menu button, .menu a {
+  background:#7d1a41;color:#fff;border:0;border-radius:6px;
+  padding:12px 16px; margin:0 4px; font-size:15px; font-weight:bold;
+  text-decoration:none; display: inline-block; flex-shrink: 0;
+}
+.menu button:active, .menu a:active { background: #a57f2c; }
 
-        body { background-color: var(--bg-color); color: var(--text-primary); display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 15px; }
+.cuerpo{padding:14px; max-width: 800px; margin: 0 auto;}
+.caja{background:#fff;border:1px solid #ccc;border-radius:8px;padding:16px;margin-bottom:15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);}
+label{display:block;font-weight:bold;margin:12px 0 5px;font-size:14px; color:#444;}
+input,select,textarea{width:100%;box-sizing:border-box;font-size:16px;padding:12px;border:2px solid #ddd;border-radius:6px; background:#fafafa;}
+input:focus,select:focus,textarea:focus { border-color: #611232; outline: none; background:#fff;}
 
-        /* NAVEGACIÓN SUPERIOR */
-        nav { width: 100%; max-width: 1000px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 20px; }
-        @media (min-width: 600px) { nav { justify-content: flex-end; } }
-        
-        .nav-btn { background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px 18px; border-radius: 25px; cursor: pointer; font-weight: bold; box-shadow: var(--card-shadow); display: flex; align-items: center; gap: 8px; }
-        .nav-btn:hover { border-color: var(--accent-color); color: var(--accent-color); transform: translateY(-2px); }
+.b{background:#611232;color:#fff;border:0;border-radius:6px;padding:14px 16px;font-size:16px;font-weight:bold;margin:12px 8px 0 0; width: 100%; box-sizing: border-box; display: block; text-align: center;}
+.b2{background:#fff;color:#611232;border:2px solid #611232; margin-top: 10px;}
+.err{background:#f8e2e2;color:#a3262a;padding:12px;margin-top:12px;font-weight:bold;border-radius:6px;display:none;}
+.ok{color:#1d6b3f;font-weight:bold;}
 
-        header { text-align: center; margin-bottom: 25px; padding: 0 10px; }
-        header h1 { font-size: clamp(2rem, 5vw, 2.5rem); background: linear-gradient(135deg, var(--accent-color), #805ad5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        header p { color: var(--text-secondary); font-weight: 500; font-size: clamp(0.9rem, 3vw, 1.1rem); }
+table{width:100%;border-collapse:collapse;font-size:14px; margin-top: 10px;}
+td,th{border-bottom:1px solid #ddd;padding:10px 4px;text-align:center}
+td.n,th.n{text-align:left}
+.rojo{color:#a3262a;font-weight:bold}
+.f{border-bottom:1px dotted #999;padding:6px 0}
+.f b{display:block;font-size:12px;color:#777; text-transform: uppercase;}
 
-        /* =========================================
-           VISTA 1: TRADUCTOR PRINCIPAL
-           ========================================= */
-        .main-container { width: 100%; max-width: 900px; display: flex; flex-direction: column; align-items: center; }
-        
-        .translation-box { width: 100%; display: flex; flex-direction: column; gap: 15px; background: var(--panel-bg); padding: 20px; border-radius: 16px; box-shadow: var(--card-shadow); margin-bottom: 20px; }
-        @media (min-width: 768px) { 
-            .translation-box { display: grid; grid-template-columns: 1fr auto 1fr; gap: 20px; padding: 30px; align-items: center; } 
-            .panel { align-self: stretch; }
-        }
-        
-        .panel { display: flex; flex-direction: column; gap: 12px; }
-        .lang-select { padding: 12px 5px; border: none; border-bottom: 2px solid var(--border-color); font-size: 1.1rem; color: var(--accent-color); font-weight: bold; background: transparent; cursor: pointer; outline: none; width: 100%; }
-        textarea { width: 100%; height: 120px; padding: 15px; background-color: transparent; color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 10px; resize: none; font-size: 1.2rem; outline: none; }
-        @media (min-width: 768px) { textarea { height: 140px; font-size: 1.3rem; } }
-        textarea:focus { border-color: var(--accent-color); box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.2); }
-        #output-text { background-color: rgba(0,0,0,0.02); font-weight: 600; }
-        [data-theme="dark"] #output-text { background-color: rgba(255,255,255,0.02); }
-        
-        .description-box { background-color: rgba(49, 130, 206, 0.1); color: var(--text-primary); padding: 15px; border-radius: 8px; font-size: 0.95rem; border-left: 4px solid var(--accent-color); line-height: 1.5; }
-        .description-box.not-found { background-color: rgba(229, 62, 62, 0.1); border-left-color: var(--alert-color); }
+.sec{display:none}
+h2 { color: #611232; margin-top: 0; font-size: 22px;}
+h3 { font-size: 18px; color: #444; border-bottom: 2px solid #ddd; padding-bottom: 5px; margin-top: 25px;}
 
-        .swap-btn { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 50%; width: 45px; height: 45px; font-size: 1.2rem; cursor: pointer; justify-self: center; align-self: center; color: var(--text-secondary); box-shadow: var(--card-shadow); display: flex; align-items: center; justify-content: center; }
-        @media (min-width: 768px) { .swap-btn { width: 50px; height: 50px; font-size: 1.4rem; transform: rotate(90deg); } }
-        .swap-btn:hover { color: var(--accent-color); border-color: var(--accent-color); transform: scale(1.05); }
-        @media (min-width: 768px) { .swap-btn:hover { transform: rotate(90deg) scale(1.05); } }
+.grande{display:block;width:100%;text-align:left;border:2px solid #611232;border-radius:8px;padding:18px;margin-bottom:12px;font-size:18px;font-weight:bold;background:#fff;color:#222;}
+.grande.g1{background:#611232;color:#fff}
+.grande span{display:block;font-size:13px;font-weight:normal;margin-top:6px; opacity: 0.9;}
 
-        .primary-btn { display: block; width: 100%; max-width: 300px; padding: 15px 20px; margin: 0 auto; background: linear-gradient(135deg, var(--accent-color), #2b6cb0); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(49, 130, 206, 0.4); transition: transform 0.2s; }
-        .primary-btn:hover { transform: translateY(-2px); }
+.lista a{display:block;background:#fff;border:1px solid #ccc;border-left:5px solid #611232;border-radius:6px;padding:14px;margin-bottom:10px;color:#222;text-decoration:none;font-weight:bold; font-size: 15px;}
+.lista a.btnlink{border-left-color:#a57f2c}
 
-        /* =========================================
-           VISTA 2: PANEL DE ADMINISTRACIÓN (DASHBOARD)
-           ========================================= */
-        #admin-dashboard { display: none; width: 100%; max-width: 1000px; background: var(--panel-bg); border-radius: 16px; box-shadow: var(--card-shadow); overflow: hidden; animation: fadeIn 0.4s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .dashboard-container { display: flex; flex-direction: column; min-height: 500px; }
-        @media (min-width: 768px) { .dashboard-container { flex-direction: row; } }
+/* Etiquetas de estado para demostrar la base de datos */
+.estado-etiqueta { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 13px; font-weight: bold; color: white; float: right; }
+.est-pendiente { background: #f39c12; }
+.est-autorizado { background: #2ecc71; }
+.est-rechazado { background: #e74c3c; }
 
-        /* Menú Lateral del Dashboard */
-        .admin-sidebar { background: rgba(0,0,0,0.03); width: 100%; padding: 20px; border-bottom: 1px solid var(--border-color); display: flex; flex-direction: row; gap: 10px; overflow-x: auto; }
-        [data-theme="dark"] .admin-sidebar { background: rgba(255,255,255,0.02); }
-        @media (min-width: 768px) { .admin-sidebar { width: 250px; flex-direction: column; border-bottom: none; border-right: 1px solid var(--border-color); } }
-
-        .sidebar-title { display: none; font-size: 1.2rem; color: var(--accent-color); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
-        @media (min-width: 768px) { .sidebar-title { display: block; } }
-
-        .menu-btn { background: transparent; border: none; padding: 12px 15px; text-align: left; border-radius: 8px; cursor: pointer; font-size: 1rem; color: var(--text-primary); font-weight: 500; transition: background 0.2s; white-space: nowrap; }
-        .menu-btn:hover { background: rgba(49, 130, 206, 0.1); color: var(--accent-color); }
-        .menu-btn.active { background: var(--accent-color); color: white; box-shadow: 0 4px 10px rgba(49, 130, 206, 0.3); }
-
-        /* Contenido del Dashboard */
-        .admin-content { flex: 1; padding: 20px; position: relative; }
-        @media (min-width: 768px) { .admin-content { padding: 30px; } }
-        
-        .tab-content { display: none; animation: fadeIn 0.3s; }
-        .tab-content.active { display: block; }
-        
-        .tab-title { font-size: 1.5rem; margin-bottom: 20px; color: var(--accent-color); border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
-
-        /* Estilos Internos del CRUD */
-        .search-bar { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 8px; background: transparent; color: var(--text-primary); font-size: 1rem; }
-        .table-wrapper { width: 100%; overflow-x: auto; border: 1px solid var(--border-color); border-radius: 8px; }
-        .table-container { max-height: 400px; overflow-y: auto; }
-        table { width: 100%; min-width: 600px; border-collapse: collapse; text-align: left; }
-        th, td { padding: 12px 15px; border-bottom: 1px solid var(--border-color); font-size: 0.95rem; }
-        th { background: var(--bg-color); position: sticky; top: 0; z-index: 1; }
-        .td-actions { display: flex; gap: 8px; }
-        .btn-edit { background: var(--accent-color); color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; }
-        .btn-delete { background: var(--alert-color); color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; }
-
-        .crud-form { display: grid; grid-template-columns: 1fr; gap: 15px; margin-bottom: 25px; }
-        @media (min-width: 768px) { .crud-form { grid-template-columns: 1fr 1fr; } }
-        .crud-form input { padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; background: transparent; color: var(--text-primary); font-size: 1rem; outline: none; width: 100%; }
-        .crud-form input:focus { border-color: var(--accent-color); }
-        .crud-form .full-width { grid-column: 1 / -1; }
-        .action-btns { display: flex; flex-direction: column; gap: 10px; grid-column: 1 / -1; }
-        @media (min-width: 600px) { .action-btns { flex-direction: row; } }
-        .btn-create { background: var(--success-color); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; flex: 1; }
-        .btn-update { background: #d69e2e; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; flex: 1; display: none; }
-        .btn-cancel { background: var(--text-secondary); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; flex: 1; display: none; }
-        
-        .settings-card { background: var(--bg-color); padding: 20px; border-radius: 10px; margin-bottom: 15px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
-    </style>
+</style>
 </head>
 <body>
 
-    <nav>
-        <button id="nav-translator" class="nav-btn" style="display:none;">🌍 Volver al Traductor</button>
-        <button id="nav-admin" class="nav-btn">⚙️ Administrar Software</button>
-    </nav>
+<div class="top">
+  <b>CBTis 205</b>
+  <span style="font-size:14px; opacity: 0.9;">Juchitán de Zaragoza, Oaxaca</span><br>
+  <small id="estado" style="display:inline-block; margin-top: 8px; font-size:11px; background: rgba(0,0,0,0.2); padding: 4px 8px; border-radius: 12px;"></small>
+</div>
 
-    <header id="main-header">
-        <h1>Traductor Diidxazá</h1>
-        <p>Preservando nuestra lengua zapoteca</p>
-    </header>
+<!-- Menú adaptado para deslizar con el dedo en celulares -->
+<div class="menu">
+  <button onclick="ir('inicio')">Inicio</button>
+  <button onclick="ir('permiso')">Nuevo Permiso</button>
+  <button onclick="ir('mis-tramites')" style="background: #a57f2c;">📂 Mis Trámites</button>
+  <button onclick="ir('boleta')">Boleta</button>
+  <button onclick="ir('estudiantes')">Estudiantes</button>
+  <button onclick="ir('aspirantes')">Aspirantes 2025</button>
+  <button onclick="ir('orient')">Orientación</button>
+</div>
 
-    <main class="main-container" id="view-translator">
-        <section class="translation-box">
-            <div class="panel">
-                <select id="lang-source" class="lang-select">
-                    <option value="es" selected>Español</option>
-                    <option value="zap">Zapoteco</option>
-                </select>
-                <textarea id="input-text" placeholder="Escribe la palabra aquí..."></textarea>
-            </div>
-            <button id="swap-btn" class="swap-btn" title="Invertir idiomas">⇅</button>
-            <div class="panel">
-                <select id="lang-target" class="lang-select">
-                    <option value="zap" selected>Zapoteco</option>
-                    <option value="es">Español</option>
-                </select>
-                <textarea id="output-text" placeholder="Traducción" readonly></textarea>
-                <div id="description-box" class="description-box">
-                    <em>La descripción aparecerá aquí...</em>
-                </div>
-            </div>
-            <button id="translate-btn" class="primary-btn">Traducir Palabra</button>
-        </section>
-    </main>
+<div class="cuerpo">
 
-    <section id="admin-dashboard">
-        <div class="dashboard-container">
-            <aside class="admin-sidebar">
-                <h2 class="sidebar-title">Menú CRUD</h2>
-                <button class="menu-btn active" onclick="switchTab('tab-diccionario')">📚 Diccionario</button>
-                <button class="menu-btn" onclick="switchTab('tab-editor')">✏️ Editor (CRUD)</button>
-                <button class="menu-btn" onclick="switchTab('tab-config')">⚙️ Configuración</button>
-            </aside>
+<div id="inicio" class="sec">
+  <h2>Bienvenido a la comunidad</h2>
+  <button class="grande g1" onclick="ir('permiso')">📝 Solicitar permiso escolar<span>Llena el formato para justificar faltas o salidas.</span></button>
+  <button class="grande" onclick="ir('mis-tramites')">📂 Ver mis trámites guardados<span>Revisa si Orientación ya autorizó tu permiso.</span></button>
+  <button class="grande" onclick="ir('boleta')">📊 Consultar boleta<span>Ingresa con tu matrícula y CURP.</span></button>
 
-            <main class="admin-content">
-                
-                <div id="tab-diccionario" class="tab-content active">
-                    <h3 class="tab-title">Gestión de Palabras <span id="total-words" style="float:right; font-size:1rem; color:var(--text-secondary);"></span></h3>
-                    <input type="text" id="crud-search" class="search-bar" placeholder="🔍 Buscar en Zapoteco o Español...">
-                    <div class="table-wrapper">
-                        <div class="table-container">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Español</th>
-                                        <th>Zapoteco</th>
-                                        <th>Descripción</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="crud-table-body">
-                                    </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+  <h3>Noticias</h3>
+  <div class="lista">
+    <a href="#" target="_blank">Resultados de evaluación diagnóstica de ingreso 2025</a>
+    <a href="#" target="_blank">Registro para obtener una ficha</a>
+  </div>
+</div>
 
-                <div id="tab-editor" class="tab-content">
-                    <h3 class="tab-title" id="form-title">Agregar Nueva Palabra</h3>
-                    <div class="crud-form">
-                        <input type="hidden" id="edit-id">
-                        <input type="text" id="crud-es" placeholder="Palabra en Español" required>
-                        <input type="text" id="crud-zap" placeholder="Palabra en Zapoteco" required>
-                        <input type="text" id="crud-desc" class="full-width" placeholder="Descripción detallada de la palabra" required>
-                        
-                        <div class="action-btns">
-                            <button id="btn-create" class="btn-create">➕ Guardar en Base de Datos</button>
-                            <button id="btn-update" class="btn-update">💾 Actualizar Palabra</button>
-                            <button id="btn-cancel" class="btn-cancel">✖ Cancelar Edición</button>
-                        </div>
-                    </div>
-                </div>
+<!-- NUEVA SECCIÓN: MIS TRÁMITES (Para ver la Base de Datos en acción) -->
+<div id="mis-tramites" class="sec">
+  <h2>Mis Trámites Guardados</h2>
+  <p style="font-size:14px; color:#555; background: #fff; padding: 10px; border-radius: 6px; border-left: 4px solid #3498db;">
+    ℹ️ Esta sección lee los datos desde el almacenamiento local de tu celular. Todo lo que pidas aparecerá aquí.
+  </p>
+  
+  <div id="mt-lista"></div>
+  
+  <button class="b b2" onclick="limpiarBaseDatos()" style="border-color:#a3262a; color:#a3262a;">🗑️ Borrar toda la base de datos</button>
+</div>
 
-                <div id="tab-config" class="tab-content">
-                    <h3 class="tab-title">Ajustes del Sistema</h3>
-                    
-                    <div class="settings-card">
-                        <div>
-                            <h4>Apariencia</h4>
-                            <p style="color:var(--text-secondary); font-size:0.9rem;">Cambia entre modo claro y oscuro.</p>
-                        </div>
-                        <button id="theme-toggle" class="nav-btn" style="margin:0;">🌙 Activar Modo Oscuro</button>
-                    </div>
+<div id="permiso" class="sec">
+  <h2>Solicitar permiso</h2>
+  <div class="caja">
+    <label>Nombre completo del alumno</label><input id="p-nombre">
+    <label>Matrícula</label><input id="p-mat" type="number">
+    <label>Semestre y grupo</label><input id="p-grupo" placeholder="Ej. 5° B Programación">
+    <label>Tipo de permiso</label>
+    <select id="p-tipo">
+      <option>Salida anticipada</option>
+      <option>Entrada tardía</option>
+      <option>Inasistencia</option>
+      <option>Cita médica</option>
+      <option>Otro</option>
+    </select>
+    <label>Fecha</label><input id="p-fecha" type="date">
+    <label>Hora (opcional)</label><input id="p-hora" type="time">
+    <label>Madre, padre o tutor</label><input id="p-tutor">
+    <label>Motivo</label><textarea id="p-motivo" rows="3"></textarea>
+    
+    <div id="p-err" class="err"></div>
+    <button class="b" onclick="generarPermiso()">Guardar Permiso</button>
+    <button class="b b2" onclick="ejemploPermiso()">Llenar con ejemplo</button>
+  </div>
+  <div id="p-doc"></div>
+</div>
 
-                    <div class="settings-card" style="border-left: 4px solid var(--alert-color);">
-                        <div>
-                            <h4>Restablecer Diccionario</h4>
-                            <p style="color:var(--text-secondary); font-size:0.9rem;">Elimina las palabras añadidas y restaura las originales.</p>
-                        </div>
-                        <button onclick="resetearDiccionario()" class="btn-delete" style="padding:10px 15px; font-weight:bold;">⚠️ Restaurar Fábrica</button>
-                    </div>
-                </div>
+<div id="boleta" class="sec">
+  <h2>Consultar boleta</h2>
+  <div class="caja">
+    <p style="font-size:14px; background:#f9f9f9; padding:10px; border-radius:6px;">Demostración: usa el botón de abajo para autocompletar.</p>
+    <label>Matrícula</label><input id="b-mat" type="number">
+    <label>CURP</label><input id="b-curp" maxlength="18" style="text-transform: uppercase;">
+    <div id="b-err" class="err"></div>
+    <button class="b" onclick="verBoleta()">Consultar Calificaciones</button>
+    <button class="b b2" onclick="ejemploBoleta()">Autocompletar Ejemplo</button>
+  </div>
+  <div id="b-doc"></div>
+</div>
 
-            </main>
-        </div>
-    </section>
+<div id="orient" class="sec">
+  <h2>Panel de Orientación</h2>
+  <div class="caja" id="o-login">
+    <p style="font-size:14px">Sistema para el personal del CBTis. El PIN es <strong>1234</strong>.</p>
+    <label>PIN de Acceso</label><input id="o-pin" type="number" pattern="[0-9]*" inputmode="numeric">
+    <div id="o-err" class="err"></div>
+    <button class="b" onclick="entrarOrient()">Ingresar al Sistema</button>
+  </div>
+  <div id="o-panel" style="display:none">
+    <div id="o-lista"></div>
+  </div>
+</div>
 
-    <script>
-        // --- 1. BASE DE DATOS MASIVA (Más de 100 palabras) ---
-        const diccionarioBase = [
-            // Familia y Personas
-            { es: "gente", zap: "binni", desc: "Conjunto de personas o individuo" },
-            { es: "persona", zap: "binni", desc: "Individuo de la especie humana" },
-            { es: "mujer", zap: "gunaa", desc: "Persona de sexo femenino" },
-            { es: "mujer", zap: "xquidxe", desc: "Persona de sexo femenino (variante del istmo)" },
-            { es: "hombre", zap: "nguiu", desc: "Persona de sexo masculino" },
-            { es: "niño", zap: "bidxiña", desc: "Persona pequeña en crecimiento" },
-            { es: "niño", zap: "binni xquidxe", desc: "Infante o persona pequeña" },
-            { es: "niño", zap: "xtiidxi", desc: "Persona en la etapa de la niñez" },
-            { es: "niña", zap: "xquidxiña", desc: "Mujer pequeña en crecimiento" },
-            { es: "niña", zap: "gunaa xquidxe", desc: "Mujer en etapa de crecimiento" },
-            { es: "madre", zap: "naa", desc: "Mujer que cuida y da vida" },
-            { es: "padre", zap: "xtaa", desc: "Hombre que cuida y protege" },
-            { es: "padre", zap: "xii", desc: "Figura paterna (variante)" },
-            { es: "hermano", zap: "bidxa", desc: "Familiar masculino" },
-            { es: "hermana", zap: "biza", desc: "Familiar femenino" },
-            { es: "comunidad", zap: "binni guenda", desc: "Grupo de personas organizadas" },
-            { es: "invitado", zap: "binni gucá", desc: "Persona que visita un lugar" },
-            { es: "pueblo", zap: "guidxi", desc: "Lugar donde vive una comunidad" },
-            
-            // Cuerpo Humano
-            { es: "cabeza", zap: "ique", desc: "Parte superior del cuerpo humano" },
-            { es: "pie", zap: "nii", desc: "Extremidad inferior para caminar" },
-            { es: "nariz", zap: "xquidxe", desc: "Órgano del olfato y respiración" },
-            { es: "oreja", zap: "diaga", desc: "Órgano de la audición" },
-            { es: "diente", zap: "layu", desc: "Pieza ósea en la boca para masticar" },
-            { es: "sangre", zap: "rini", desc: "Líquido vital del cuerpo humano" },
-            { es: "mano", zap: "na", desc: "Extremidad para agarrar objetos" },
-            { es: "corazón", zap: "ladxi", desc: "Órgano que bombea sangre (afectivo)" },
-            { es: "corazón", zap: "xtena", desc: "Órgano vital del sistema circulatorio" },
-            { es: "boca", zap: "zaa", desc: "Parte del cuerpo para hablar y comer" },
-            { es: "boca", zap: "raa", desc: "Cavidad oral (variante)" },
-            
-            // Naturaleza, Elementos y Geografía
-            { es: "agua", zap: "nisa", desc: "Líquido vital para la existencia" },
-            { es: "tierra", zap: "yoo", desc: "Suelo donde se cultiva" },
-            { es: "flor", zap: "guie'", desc: "Parte de la planta, símbolo de belleza" },
-            { es: "pez", zap: "bela", desc: "Animal acuático" },
-            { es: "maíz", zap: "doo", desc: "Grano, alimento básico ancestral" },
-            { es: "maíz", zap: "xuba", desc: "Semilla fundamental de la dieta local" },
-            { es: "hoja", zap: "guixi", desc: "Órgano vegetal que brota del tallo" },
-            { es: "hoja", zap: "yaga guie'", desc: "Follaje de los árboles" },
-            { es: "árbol", zap: "yaga", desc: "Planta grande con tronco leñoso" },
-            { es: "sol", zap: "gubidxa", desc: "Estrella que da luz y calor" },
-            { es: "viento", zap: "biu", desc: "Corriente de aire natural" },
-            { es: "viento", zap: "bi'", desc: "Aire en movimiento" },
-            { es: "planta", zap: "guie' sti'", desc: "Ser vivo que crece en la tierra" },
-            { es: "fuego", zap: "guié", desc: "Energía que produce calor y luz" },
-            { es: "venado", zap: "bidxa", desc: "Animal salvaje de gran agilidad" },
-            { es: "nube", zap: "chupa", desc: "Masa de vapor suspendida en el cielo" },
-            { es: "lluvia", zap: "zaa", desc: "Precipitación pluvial" },
-            { es: "lluvia", zap: "nisa guie", desc: "Agua que cae de las nubes" },
-            { es: "agua de lluvia", zap: "nisa zaa", desc: "Agua recolectada de la lluvia" },
-            { es: "estrella", zap: "xquidxe", desc: "Cuerpo celeste que brilla en la noche" },
-            { es: "estrella", zap: "xquidxe guie", desc: "Astro luminoso" },
-            { es: "amanecer", zap: "gubidxa guie", desc: "Inicio del día con la luz solar" },
-            { es: "aire", zap: "bidxi", desc: "Mezcla de gases que respiramos" },
-            { es: "río", zap: "nisa gucá", desc: "Corriente natural de agua" },
-            { es: "río", zap: "yoo nisa", desc: "Lecho de agua dulce" },
-            { es: "mar", zap: "nisadó'", desc: "Gran masa de agua salada" },
-            { es: "montaña", zap: "dani", desc: "Gran elevación natural del terreno" },
-            { es: "montaña", zap: "guie chupa", desc: "Elevación geográfica" },
-            { es: "piedra", zap: "guiee", desc: "Materia mineral sólida" },
-            { es: "arena", zap: "yuxi", desc: "Partículas pequeñas de roca" },
-            { es: "animal", zap: "badu guie", desc: "Ser vivo con movimiento propio" },
-            { es: "fruta", zap: "zaa guie", desc: "Fruto comestible y dulce" },
-            { es: "semilla", zap: "naa guie", desc: "Parte que da origen a nuevas plantas" },
-            { es: "cielo", zap: "xquidxe guie", desc: "Espacio infinito sobre la Tierra" },
-            { es: "perro", zap: "biguie'", desc: "Canino doméstico" },
-            { es: "perro", zap: "badu", desc: "Animal doméstico fiel" },
-            { es: "gato", zap: "migu", desc: "Felino doméstico ágil" },
-            
-            // Conceptos Abstractos, Tiempo y Sociedad
-            { es: "nombre", zap: "guié", desc: "Identificación de una persona" },
-            { es: "nombre propio", zap: "laani", desc: "Nombre específico para distinguir a alguien" },
-            { es: "casa", zap: "sti", desc: "Hogar o vivienda familiar" },
-            { es: "casa", zap: "yoo", desc: "Vivienda física o construcción" },
-            { es: "escuela", zap: "yoo bigu", desc: "Lugar destinado al aprendizaje" },
-            { es: "amor", zap: "guendaró", desc: "Sentimiento de profundo afecto" },
-            { es: "día", zap: "dxi", desc: "Periodo de 24 horas o luz solar" },
-            { es: "día en casa", zap: "gubidxa yoo", desc: "Estancia diurna en el hogar" },
-            { es: "vida", zap: "guenda", desc: "Estado de existencia de seres vivos" },
-            { es: "fiesta", zap: "guenda guca", desc: "Evento social de celebración" },
-            { es: "trabajo", zap: "dxiña", desc: "Actividad física o mental productiva" },
-            { es: "luz", zap: "biaani", desc: "Energía que ilumina el entorno" },
-            { es: "palabra", zap: "didxa", desc: "Unidad del lenguaje" },
-            { es: "palabra", zap: "raa", desc: "Expresión hablada" },
-            { es: "idioma", zap: "guenda sti", desc: "Lengua propia para comunicarse" },
-            { es: "cultura", zap: "guendaró sti", desc: "Conjunto de costumbres y saberes" },
-            { es: "historia", zap: "guendaró dxi", desc: "Relato de sucesos pasados" },
-            { es: "salud", zap: "guenda rini", desc: "Estado de bienestar físico y mental" },
-            { es: "energía", zap: "guenda biaani", desc: "Capacidad para realizar acciones" },
-            { es: "tortilla", zap: "gueta", desc: "Alimento circular de masa de maíz" },
-            
-            // Verbos
-            { es: "comer", zap: "rusu", desc: "Acción de alimentarse" },
-            { es: "comer", zap: "go", desc: "Ingerir alimentos (variante)" },
-            { es: "beber", zap: "ruchaa", desc: "Ingerir líquidos para hidratarse" },
-            { es: "hacer", zap: "guca", desc: "Realizar o producir algo" },
-            { es: "voy a hacer", zap: "naa guca", desc: "Intención de realizar una tarea" },
-            { es: "ir", zap: "ra", desc: "Trasladarse de un punto a otro" },
-            { es: "poder", zap: "raca", desc: "Tener la facultad o permiso de hacer algo" },
-            { es: "saber", zap: "nanda", desc: "Poseer conocimiento de algo" },
-            { es: "ver", zap: "guni", desc: "Percibir a través de los ojos" },
-            { es: "amar", zap: "rini guendaró", desc: "Sentir afecto profundo" },
-            
-            // Adjetivos, Pronombres y Otros
-            { es: "vivo", zap: "nabani", desc: "Que tiene signos de vida" },
-            { es: "muerto", zap: "nati", desc: "Que ha perdido la vida" },
-            { es: "yo", zap: "naa ti", desc: "Pronombre primera persona" },
-            { es: "tú", zap: "luu", desc: "Pronombre segunda persona" },
-            { es: "nosotros", zap: "laaca", desc: "Pronombre primera persona plural" },
-            { es: "este", zap: "ndi", desc: "Indica cercanía espacial" },
-            { es: "aquí", zap: "ndi", desc: "Indica lugar cercano" },
-            { es: "eso", zap: "ndi'", desc: "Indica objeto o situación lejana" },
-            { es: "no", zap: "cadi", desc: "Partícula de negación" },
-            { es: "gracias", zap: "xquixe pe'", desc: "Expresión de profunda gratitud" },
-            { es: "hola", zap: "guidxi", desc: "Saludo común (acercamiento al pueblo)" },
-            { es: "hermoso", zap: "sicarú", desc: "Que tiene gran belleza" },
-            { es: "bonito", zap: "sicarú", desc: "Atractivo a la vista" },
-            { es: "dulce", zap: "naxhi", desc: "De sabor agradable" },
-            { es: "verdad", zap: "dxandí'", desc: "Cierto, conforme a la realidad" },
-            { es: "luna", zap: "beeu", desc: "Satélite natural de la Tierra" },
-            { es: "mes", zap: "beeu", desc: "Periodo de tiempo lunar" }
-        ];
+<!-- Secciones extra vacías para mantener el código corto -->
+<div id="estudiantes" class="sec"><h2>Sección Estudiantes</h2></div>
+<div id="aspirantes" class="sec"><h2>Aspirantes 2025</h2></div>
 
-        let diccionario = JSON.parse(localStorage.getItem('diccionarioZapoteco')) || diccionarioBase;
+</div>
 
-        function guardarDatos() {
-            localStorage.setItem('diccionarioZapoteco', JSON.stringify(diccionario));
-            renderTable();
-        }
+<script>
+/* =========================================
+   BASE DE DATOS LOCAL (localStorage)
+   ========================================= */
 
-        // --- 2. LÓGICA DE VISTAS (Navegación) ---
-        const viewTranslator = document.getElementById('view-translator');
-        const viewAdmin = document.getElementById('admin-dashboard');
-        const btnNavAdmin = document.getElementById('nav-admin');
-        const btnNavTranslator = document.getElementById('nav-translator');
-        const headerTitle = document.getElementById('main-header');
+// 1. Cargar datos del celular/navegador
+var permisos = JSON.parse(localStorage.getItem('cbtis_permisos')) || [];
 
-        btnNavAdmin.addEventListener('click', () => {
-            viewTranslator.style.display = 'none';
-            viewAdmin.style.display = 'block';
-            btnNavAdmin.style.display = 'none';
-            btnNavTranslator.style.display = 'flex';
-            headerTitle.style.display = 'none'; // Ocultamos el título grande en el admin
-            renderTable(); // Cargamos la tabla al entrar
-        });
+var ALUMNOS_BASE = {
+  "20250001": {
+    curp: "JISM080314MOCMNRA1", nombre: "Marisol Jiménez Santiago", grupo: "5° B Programación",
+    materias: [
+      ["Pensamiento Matemático III", 8, 9, 9, 2], ["Lengua y Comunicación III", 9, 9, 10, 0],
+      ["Inglés V", 10, 9, 10, 1], ["Programación web", 10, 10, 9, 0]
+    ]
+  }
+};
+var ALUMNOS = JSON.parse(localStorage.getItem('cbtis_alumnos')) || ALUMNOS_BASE;
 
-        btnNavTranslator.addEventListener('click', () => {
-            viewAdmin.style.display = 'none';
-            viewTranslator.style.display = 'flex';
-            btnNavTranslator.style.display = 'none';
-            btnNavAdmin.style.display = 'flex';
-            headerTitle.style.display = 'block';
-        });
+// 2. Guardar datos en la memoria
+function guardarBaseDatos() {
+  localStorage.setItem('cbtis_permisos', JSON.stringify(permisos));
+  localStorage.setItem('cbtis_alumnos', JSON.stringify(ALUMNOS));
+}
 
-        // --- 3. LÓGICA DEL MENU LATERAL (TABS) ---
-        function switchTab(tabId) {
-            // Quitar clase active de todos los botones y contenidos
-            document.querySelectorAll('.menu-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            
-            // Activar el seleccionado
-            event.target.classList.add('active');
-            document.getElementById(tabId).classList.add('active');
-        }
+// 3. Borrar la base de datos
+function limpiarBaseDatos() {
+  if (confirm("¿Seguro que deseas borrar TODOS los permisos guardados en este dispositivo?")) {
+    localStorage.removeItem('cbtis_permisos');
+    permisos = [];
+    dibujarMisTramites(); // Refrescar la pantalla actual
+    alert("Base de datos limpia.");
+  }
+}
 
-        // --- 4. LÓGICA DEL TRADUCTOR ---
-        const inputText = document.getElementById('input-text');
-        const outputText = document.getElementById('output-text');
-        const langSource = document.getElementById('lang-source');
-        const langTarget = document.getElementById('lang-target');
-        const descBox = document.getElementById('description-box');
+/* =========================================
+   LÓGICA DEL PROGRAMA
+   ========================================= */
+function g(id) { return document.getElementById(id); }
 
-        function traducir() {
-            const palabra = inputText.value.trim().toLowerCase();
-            const origen = langSource.value;
-            
-            if (palabra === "") {
-                outputText.value = "";
-                descBox.innerHTML = "<em>La descripción aparecerá aquí...</em>";
-                descBox.className = 'description-box';
-                return;
-            }
+function ir(nombre) {
+  var ids = ["inicio", "permiso", "mis-tramites", "boleta", "estudiantes", "aspirantes", "orient"];
+  for (var i = 0; i < ids.length; i++) {
+    g(ids[i]).style.display = (ids[i] === nombre) ? "block" : "none";
+  }
+  
+  // Si abren "Mis Trámites", recargar la base de datos visualmente
+  if(nombre === 'mis-tramites') {
+    dibujarMisTramites();
+  }
+  window.scrollTo(0, 0);
+}
 
-            let resultados = diccionario.filter(item => origen === 'es' ? item.es.toLowerCase() === palabra : item.zap.toLowerCase() === palabra);
+function hoy() {
+  var d = new Date();
+  return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
+}
 
-            if (resultados.length > 0) {
-                let traducciones = resultados.map(r => origen === 'es' ? r.zap : r.es);
-                outputText.value = [...new Set(traducciones)].join(" / ");
-                
-                let htmlDescripciones = "<strong>Significados encontrados:</strong><br>";
-                resultados.forEach(r => { htmlDescripciones += `• ${r.desc}<br>`; });
-                descBox.innerHTML = htmlDescripciones;
-                descBox.className = 'description-box';
-            } else {
-                outputText.value = "Palabra no encontrada.";
-                descBox.innerHTML = "Si conoces esta palabra, ve a <strong>Administrar Software -> Editor (CRUD)</strong> para agregarla.";
-                descBox.className = 'description-box not-found';
-            }
-        }
+function limpio(t) { return String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+function aviso(id, texto) { g(id).innerHTML = texto; g(id).style.display = texto ? "block" : "none"; }
 
-        document.getElementById('translate-btn').addEventListener('click', traducir);
-        document.getElementById('swap-btn').addEventListener('click', () => {
-            let tempLang = langSource.value; langSource.value = langTarget.value; langTarget.value = tempLang;
-            let tempText = inputText.value;
-            if(tempText && !outputText.value.includes("no encontrada")) {
-                inputText.value = outputText.value.split(" / ")[0]; traducir();
-            } else { inputText.value = ""; outputText.value = ""; descBox.innerHTML = "<em>La descripción aparecerá aquí...</em>"; }
-        });
-        inputText.addEventListener('keyup', (e) => { if (e.key === 'Enter') traducir(); });
+/* ---------- Mis Trámites (Vista Alumno) ---------- */
+function dibujarMisTramites() {
+  var html = "";
+  // Recorrer del más nuevo al más viejo
+  for (var i = permisos.length - 1; i >= 0; i--) {
+    var p = permisos[i];
+    var claseCss = "est-pendiente";
+    if(p.estado === "Autorizado") claseCss = "est-autorizado";
+    if(p.estado === "Rechazado") claseCss = "est-rechazado";
 
-        // --- 5. SISTEMA CRUD (LÓGICA) ---
-        const tableBody = document.getElementById('crud-table-body');
-        const searchInput = document.getElementById('crud-search');
-        
-        const idEdit = document.getElementById('edit-id');
-        const inputEs = document.getElementById('crud-es');
-        const inputZap = document.getElementById('crud-zap');
-        const inputDesc = document.getElementById('crud-desc');
-        const btnCreate = document.getElementById('btn-create');
-        const btnUpdate = document.getElementById('btn-update');
-        const btnCancel = document.getElementById('btn-cancel');
+    html += '<div class="caja">';
+    html += '<span class="estado-etiqueta ' + claseCss + '">' + p.estado + '</span>';
+    html += '<h3 style="margin:0; border:0; padding:0; color:#611232; font-size:16px;">Folio: ' + p.folio + '</h3>';
+    html += '<div style="margin-top:10px; font-size:14px; line-height:1.5;">';
+    html += '<b>Tipo:</b> ' + limpio(p.tipo) + '<br>';
+    html += '<b>Fecha:</b> ' + limpio(p.fecha) + '<br>';
+    html += '<b>Alumno:</b> ' + limpio(p.nombre);
+    html += '</div></div>';
+  }
+  
+  if (html === "") {
+    html = '<div class="caja" style="text-align:center; color:#777;">No has guardado ningún permiso todavía.<br><button class="b b2" onclick="ir(\'permiso\')">Crear mi primer permiso</button></div>';
+  }
+  g("mt-lista").innerHTML = html;
+}
 
-        function renderTable(filtro = "") {
-            tableBody.innerHTML = "";
-            let contador = 0;
-            
-            diccionario.forEach((item, index) => {
-                if(item.es.toLowerCase().includes(filtro.toLowerCase()) || item.zap.toLowerCase().includes(filtro.toLowerCase())) {
-                    contador++;
-                    let row = `<tr>
-                        <td>${item.es}</td>
-                        <td style="color:var(--accent-color);"><strong>${item.zap}</strong></td>
-                        <td>${item.desc}</td>
-                        <td class="td-actions">
-                            <button class="btn-edit" onclick="cargarEdicion(${index})" title="Editar">✏️</button>
-                            <button class="btn-delete" onclick="eliminarPalabra(${index})" title="Eliminar">🗑️</button>
-                        </td>
-                    </tr>`;
-                    tableBody.innerHTML += row;
-                }
-            });
-            document.getElementById('total-words').textContent = `Total: ${contador} palabras`;
-        }
+/* ---------- Generar Permiso ---------- */
+function ejemploPermiso() {
+  g("p-nombre").value = "Marisol Jiménez Santiago"; g("p-mat").value = "20250001";
+  g("p-grupo").value = "5° B Programación"; g("p-tipo").value = "Salida anticipada";
+  g("p-tutor").value = "Rosa Santiago Gómez"; g("p-motivo").value = "Problema familiar urgente.";
+}
 
-        btnCreate.addEventListener('click', () => {
-            if(!inputEs.value || !inputZap.value || !inputDesc.value) { alert("Llena todos los campos."); return; }
-            diccionario.unshift({ es: inputEs.value.toLowerCase(), zap: inputZap.value.toLowerCase(), desc: inputDesc.value });
-            limpiarFormulario();
-            guardarDatos();
-            alert("Palabra agregada con éxito.");
-            switchTab('tab-diccionario'); // Regresa a la tabla para verla
-        });
+function generarPermiso() {
+  var campos = ["p-nombre", "p-mat", "p-grupo", "p-fecha", "p-tutor", "p-motivo"];
+  for (var i = 0; i < campos.length; i++) {
+    if (g(campos[i]).value.replace(/ /g, "") === "") {
+      aviso("p-err", "Faltan datos obligatorios por llenar.");
+      return;
+    }
+  }
+  aviso("p-err", "");
+  
+  // Crear el objeto para la BD
+  var nuevoPermiso = {
+    folio: "P-" + new Date().getFullYear() + "-" + ("000" + (permisos.length + 1)).slice(-4),
+    nombre: g("p-nombre").value, mat: g("p-mat").value, grupo: g("p-grupo").value,
+    tipo: g("p-tipo").value, fecha: g("p-fecha").value, hora: g("p-hora").value,
+    tutor: g("p-tutor").value, motivo: g("p-motivo").value,
+    estado: "Pendiente" // ¡Por defecto es pendiente!
+  };
+  
+  // Guardar en la Base de Datos
+  permisos.push(nuevoPermiso);
+  guardarBaseDatos();
+  
+  // Redirigir a "Mis Trámites" para que vea que se guardó
+  alert("¡Permiso guardado con éxito! Folio: " + nuevoPermiso.folio);
+  
+  // Limpiar formulario
+  g("p-nombre").value = ""; g("p-motivo").value = "";
+  ir("mis-tramites");
+}
 
-        window.cargarEdicion = function(index) {
-            idEdit.value = index;
-            inputEs.value = diccionario[index].es;
-            inputZap.value = diccionario[index].zap;
-            inputDesc.value = diccionario[index].desc;
-            
-            btnCreate.style.display = "none";
-            btnUpdate.style.display = "block";
-            btnCancel.style.display = "block";
-            
-            document.getElementById('form-title').textContent = "✏️ Editando Palabra";
-            // Forzamos el cambio a la pestaña del formulario para editar
-            document.querySelectorAll('.menu-btn')[1].click(); 
-        };
+/* ---------- Boleta ---------- */
+function ejemploBoleta() { g("b-mat").value = "20250001"; g("b-curp").value = "JISM080314MOCMNRA1"; }
 
-        btnUpdate.addEventListener('click', () => {
-            let index = idEdit.value;
-            diccionario[index] = { es: inputEs.value.toLowerCase(), zap: inputZap.value.toLowerCase(), desc: inputDesc.value };
-            limpiarFormulario();
-            guardarDatos();
-            alert("Palabra actualizada correctamente.");
-            document.querySelectorAll('.menu-btn')[0].click(); // Vuelve a la tabla
-        });
+function verBoleta() {
+  var mat = g("b-mat").value.replace(/ /g, "");
+  var curp = g("b-curp").value.replace(/ /g, "").toUpperCase();
+  var a = ALUMNOS[mat]; 
+  
+  g("b-doc").innerHTML = "";
+  if (mat === "" || curp === "") { aviso("b-err", "Llenar ambos campos."); return; }
+  if (!a || a.curp !== curp) { aviso("b-err", "Datos incorrectos o no encontrados."); return; }
+  
+  aviso("b-err", "");
+  var filas = "", suma = 0;
+  for (var i = 0; i < a.materias.length; i++) {
+    var m = a.materias[i]; var p = (m[1] + m[2] + m[3]) / 3; suma += p;
+    filas += '<tr><td class="n">' + m[0] + '</td><td>' + p.toFixed(1) + '</td><td>' + m[4] + '</td></tr>';
+  }
+  
+  g("b-doc").innerHTML =
+    '<div class="caja"><h3>Boleta de ' + a.nombre + '</h3>' +
+    '<table><tr><th class="n">Asignatura</th><th>Prom</th><th>Falt</th></tr>' + filas + '</table>' +
+    '<h3>Promedio general: ' + (suma / a.materias.length).toFixed(1) + '</h3></div>';
+}
 
-        window.eliminarPalabra = function(index) {
-            if(confirm(`¿Seguro que quieres borrar la palabra "${diccionario[index].zap}"?`)) {
-                diccionario.splice(index, 1);
-                guardarDatos();
-            }
-        };
+/* ---------- Orientación ---------- */
+function entrarOrient() {
+  if (g("o-pin").value !== "1234") { aviso("o-err", "PIN incorrecto."); return; }
+  aviso("o-err", "");
+  g("o-login").style.display = "none";
+  g("o-panel").style.display = "block";
+  dibujarOrient();
+}
 
-        btnCancel.addEventListener('click', () => {
-            limpiarFormulario();
-            document.querySelectorAll('.menu-btn')[0].click();
-        });
+function dibujarOrient() {
+  var html = "";
+  for (var i = permisos.length - 1; i >= 0; i--) {
+    var p = permisos[i];
+    html += '<div class="caja" style="border-left:4px solid #611232;">';
+    html += '<b>' + p.folio + ' · ' + limpio(p.nombre) + '</b><br>';
+    html += 'Tipo: ' + limpio(p.tipo) + '<br>Motivo: ' + limpio(p.motivo) + '<br>';
+    html += 'Estado Actual: <b>' + p.estado + '</b><br>';
+    
+    // Botones para modificar la Base de Datos
+    html += '<div style="display:flex; gap:10px; margin-top:10px;">';
+    html += '<button class="b" style="background:#2ecc71; margin:0;" onclick="cambiarEstado(' + i + ',\'Autorizado\')">Autorizar</button>';
+    html += '<button class="b" style="background:#e74c3c; margin:0;" onclick="cambiarEstado(' + i + ',\'Rechazado\')">Rechazar</button>';
+    html += '</div></div>';
+  }
+  if (html === "") { html = '<div class="caja">Base de datos vacía. No hay permisos.</div>'; }
+  g("o-lista").innerHTML = html;
+}
 
-        function limpiarFormulario() {
-            idEdit.value = ""; inputEs.value = ""; inputZap.value = ""; inputDesc.value = "";
-            btnCreate.style.display = "block"; btnUpdate.style.display = "none"; btnCancel.style.display = "none";
-            document.getElementById('form-title').textContent = "Agregar Nueva Palabra";
-        }
+function cambiarEstado(index, nuevoEstado) {
+  permisos[index].estado = nuevoEstado;
+  guardarBaseDatos(); // Se guarda en memoria
+  dibujarOrient();    // Se actualiza la vista de Orientación
+  alert("Estado actualizado y guardado en la base de datos.");
+}
 
-        searchInput.addEventListener('keyup', (e) => { renderTable(e.target.value); });
-
-        // --- 6. CONFIGURACIÓN EXTRA ---
-        document.getElementById('theme-toggle').addEventListener('click', (e) => {
-            const isDark = document.body.getAttribute('data-theme') === 'dark';
-            document.body.setAttribute('data-theme', isDark ? '' : 'dark');
-            e.target.textContent = isDark ? '🌙 Activar Modo Oscuro' : '☀️ Activar Modo Claro';
-        });
-
-        window.resetearDiccionario = function() {
-            if(confirm("⚠️ ADVERTENCIA: Esto borrará todas las palabras que hayas agregado y regresará a la lista original de 100 palabras. ¿Estás seguro?")) {
-                localStorage.removeItem('diccionarioZapoteco');
-                diccionario = JSON.parse(JSON.stringify(diccionarioBase)); // Copia fresca
-                renderTable();
-                alert("Base de datos restaurada con éxito.");
-            }
-        };
-    </script>
+/* ---------- Inicio ---------- */
+g("p-fecha").value = hoy();
+ir("inicio");
+g("estado").innerHTML = "🟢 DB Local Conectada";
+</script>
 </body>
 </html>
